@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-20",
+  "qualification": "CPU/source contracts only; native Fibo pipeline and pretrained weights not executed",
+  "shared_commit": "f797be1ea891f6aeeeb56c02402667bcf2a640a4",
+  "shared_backend_sha256": "2607d3ab51a0038e8cc26939bc650d8a4986e99fbbbf6c2c326b75c6e021a2c0",
+  "shared_pr": "https://github.com/HyperGAN/particle-sliders/pull/142",
+  "model_id": "briaai/Fibo-2.0-edit-turbo",
+  "model_revision": "177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7",
+  "runtime": {
+    "python": "3.12.15",
+    "torch": "2.14.1+cpu",
+    "particlegan": "0.9.1",
+    "cuda_initialized": false
+  },
+  "recorded_shared_results": [
+    {
+      "scope": "Fibo and shared game/state/native-binding/package regressions",
+      "passed": 190,
+      "skipped": 0,
+      "seconds": 12.49
+    },
+    {
+      "scope": "final Fibo and extracted-sdist/wheel imports",
+      "passed": 23,
+      "skipped": 0,
+      "seconds": 5.05
+    }
+  ],
+  "counts_overlap": true,
+  "standalone_distribution_tests": {
+    "passed": 3,
+    "skipped": 0,
+    "scope": "extracted-sdist/wheel, isolated offline import, shared source hashes and public resource privacy"
+  },
+  "native_validation": "pending gated model access and parent-scheduled resource slot",
+  "weights_downloaded": false,
+  "terms_accepted": false,
+  "gpu_jobs_launched": false,
+  "local_receipts_included": false,
+  "publication_pass_shared_native_contracts": {
+    "passed": 20,
+    "skipped": 0,
+    "seconds": 3.21,
+    "shared_commit": "f797be1ea891f6aeeeb56c02402667bcf2a640a4"
+  }
+}

@@ -1,0 +1,5 @@
+This wrapper imports the native Fibo integration from HyperGAN/particle-sliders.
+The routed projection reuses the existing shared TinyParticleProjection/RoutedMLP.
+Shared code retains its upstream MIT notices. No Bria model source or weights
+are copied into this wrapper. Bria Fibo 2.0 Edit Turbo weights are separately
+gated under CC BY-NC 4.0, with a commercial agreement required for commercial use.

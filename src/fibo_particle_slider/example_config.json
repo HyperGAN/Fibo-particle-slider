@@ -1,0 +1,25 @@
+{
+  "model_id": "briaai/Fibo-2.0-edit-turbo",
+  "model_revision": "177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7",
+  "diffusers_commit": "60f95274bf07ed705d675eb09d99b6ae125b601e",
+  "model_snapshot": "/path/to/already-approved/local/snapshot",
+  "model_manifest": "/path/to/staged-file-checksums.json",
+  "references": [
+    "/path/to/owned/jacket-source.png"
+  ],
+  "mask": null,
+  "neutral_instruction": "Keep the jacket and the rest of the source image unchanged.",
+  "positive_instruction": "Change only the jacket to red leather, preserving its wearer, pose, lighting and background.",
+  "num_inference_steps": 4,
+  "guidance_scale": 1.0,
+  "adapter_rank": 8,
+  "adapter_alpha": 8.0,
+  "particles": 128,
+  "particle_dim": 4,
+  "recipe": "bispf_optimized",
+  "particlegan": "0.9.1",
+  "response_scale": 1.0,
+  "batch_size": 2,
+  "qualification": "CPU contracts only; native execution and training budget require resource-owner admission",
+  "publication": "standalone source implementation proposed through draft PR; no model or adapter weights published"
+}
