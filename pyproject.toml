@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fibo-particle-slider"
+version = "0.1.0"
+description = "Experimental native Fibo 2.0 Edit Turbo routed particle slider"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {file = "LICENSE"}
+dependencies = [
+  "particle-sliders-core[serialization] @ git+https://github.com/HyperGAN/particle-sliders.git@f6807a91546e43e198645a3f8925d2dc7c9e03b4#subdirectory=packages/particle-sliders-core",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "build>=1", "pillow>=10"]
+mock = ["pillow>=10"]
+native = [
+  "diffusers @ git+https://github.com/muhammadali-afridi/diffusers.git@60f95274bf07ed705d675eb09d99b6ae125b601e",
+  "transformers>=4.57", "accelerate", "pillow>=10",
+  "torch==2.11.0", "torchvision==0.26.0",
+]
+
+[project.urls]
+Repository = "https://github.com/HyperGAN/Fibo-particle-slider"
+Shared = "https://github.com/HyperGAN/particle-sliders/pull/142"
+Model = "https://huggingface.co/briaai/Fibo-2.0-edit-turbo"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fibo_particle_slider = ["*.json", "*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[project.entry-points."particle_sliders.image_backends"]
+fibo = "fibo_particle_slider.lifecycle:BACKEND"
+
+[project.entry-points."particle_sliders.inference_backends"]
+fibo = "fibo_particle_slider.inference:INFERENCE"
