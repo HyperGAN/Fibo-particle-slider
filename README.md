@@ -5,8 +5,10 @@ For the new common session/CLI interface, see [LIFECYCLE.md](LIFECYCLE.md).
 Experimental standalone derivative for
 [`briaai/Fibo-2.0-edit-turbo`](https://huggingface.co/briaai/Fibo-2.0-edit-turbo).
 The public source repository is `HyperGAN/Fibo-particle-slider`; implementation
-is proposed through a draft PR. The shared implementation remains isolated in
-[particle-sliders draft PR 142](https://github.com/HyperGAN/particle-sliders/pull/142).
+is proposed through a draft PR. The tested shared pin is now publicly reachable through
+[merged common-core PR144](https://github.com/HyperGAN/particle-sliders/pull/144).
+Historical [PR142](https://github.com/HyperGAN/particle-sliders/pull/142) retains
+its audit target; this draft does not retarget it.
 
 The implementation lives in the pinned shared package. This wrapper re-exports
 the same classes, with no copied trainer, losses, regularizers or optimizer.
@@ -49,9 +51,10 @@ unqualified. MOSS owns current GPU scheduling.
 ## Install and CPU checks
 
 The proposed common lifecycle is pinned to commit
-`f6807a91546e43e198645a3f8925d2dc7c9e03b4` (core 0.8.2), which is local and
-unpublished. It requires parent review and a published, approved source pin
-before the Git dependency can be installed from a public checkout.
+`f6807a91546e43e198645a3f8925d2dc7c9e03b4` (core 0.8.2), preserved as public
+ancestry of merged common-core PR144. This product passed **48 installed CPU
+checks** and remains a draft for exact-head review. See
+[qualification status](PUBLICATION-STATUS.md). No package release is implied.
 Both lock copies consume the common owner's canonical 38-file source hash map.
 This PG 0.9.1 proposal preserves the native backend/provenance bytes and adds
 native-only inference plus preflight/admission/observation hooks. The prior

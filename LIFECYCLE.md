@@ -1,7 +1,10 @@
 # Fibo Edit Turbo common lifecycle
 
-Proposed local shared pin: `f6807a91546e43e198645a3f8925d2dc7c9e03b4` / core 0.8.2.
-Unpublished; exact-head review is required before draft publication.
+Exact tested shared pin: `f6807a91546e43e198645a3f8925d2dc7c9e03b4` / core 0.8.2.
+This runtime passed **48 installed CPU checks**; the pin is publicly reachable
+through merged common-core PR144 ancestry. This product remains a source draft
+for exact-head review, not pretrained quality qualification. See
+[qualification status](PUBLICATION-STATUS.md).
 
 This derivative registers backend `fibo` for `particle_sliders.lifecycle`.
 The core owns preparation dispatch, updates, EMA, checkpoints, export,
