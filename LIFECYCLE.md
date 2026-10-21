@@ -1,6 +1,6 @@
 # Fibo Edit Turbo common lifecycle
 
-Proposed local shared pin: `fd89e1c780ab5210cd1be98ec3b70977e6349379` / core 0.7.0.
+Proposed local shared pin: `32f6830f6402e85aa77b6631db64fcbbb2131f6b` / core 0.8.1.
 Unpublished; exact-head review is required before draft publication.
 
 This derivative registers backend `fibo` for `particle_sliders.lifecycle`.
@@ -90,7 +90,60 @@ suite does not establish that central hooks are required. Atomic cache staging
 and a native-request preflight hook remain source-review suggestions, not
 failures demonstrated by these tests.
 
-Compact inference construction and matched-weight HyperGAN/HNDL definitions
-remain shared-owner work. HyperGAN owns run presentation through the common
+Matched-weight HyperGAN/HNDL definitions remain shared-owner work. HyperGAN owns run presentation through the common
 on_step, manifest and artifact seams. Native EDIT sampling remains the product
 callback; this package adds no run dashboard or alternate sampler.
+
+## Core 0.8.1 local adoption proposal
+
+Fibo retains PG 0.9.1 `bispf_optimized`; there is no PG 0.9.3 profile downgrade
+or formulation change. The proposal consumes the owner's canonical source map
+and artifact hashes in both lock copies. Native backend and provenance bytes
+are unchanged. Prior core 0.7.0 commits, receipts and loaders remain separate;
+the default new fixture cohort is `fibo-core081-synthetic-v1`. Existing packets
+are never rebound to the new source identity.
+
+The training factory now supplies an `InferenceSpec`. Export native-only v2
+explicitly; `session.export()` retains the strict v1 compatibility path:
+
+```python
+from particle_sliders.inference import open_inference
+
+# Within the newly prepared core 0.8.1 training session:
+session.export_inference('new-run/native.pt', selection='ema')
+
+# Afterwards: no training configuration, cache, captured rows, critic or game.
+native = dict(prompt='keep jacket', images=[local_reference_image])
+with open_inference('new-run/native.pt', options={
+    'model_dir': staged_snapshot, 'manifest': original_verified_receipt,
+    'device': admitted_device, 'base_precision': 'bfloat16',
+}, references=True, native_request=native) as inference:
+    output = inference.render(**native, strength=.5, seed=7)
+```
+
+For a mock v2 export, runtime options are empty and output is latent only.
+Native-only Fibo is render-only: it accepts independent new edit instructions
+and ordered references, but exposes no fabricated cached-response operation.
+The common `particle-slider infer` CLI can consume the v2 artifact using
+`--runtime` and `--native`; training CLI output is still the v1 artifact, so
+create v2 with the explicit Python export above.
+
+Both factories use shared `native_cleanup`, product-owned native observation
+contexts and native-request preflight. Preflight checks prompt/VGL, local
+images, reference count, mask dimensions and native option names before model
+construction. Sampling repeats validation before invoking the native callback.
+An optional staged `before_update` callable binds the common admission seam;
+it is an injected pure policy, not permission to schedule resources. Observation
+restores native buffer registrations/values, modes, checkpoint flags and shallow
+pipeline runtime state without cloning frozen backbone parameters. Arbitrary
+native submodule surgery is outside this boundary.
+
+This adoption has source/syntax/hash inspection only. New native-only,
+preflight, admission and observation regression cases are authored but unrun,
+pending the next explicit CPU slot. The nine-case pass above belongs only to
+the preserved core 0.7.0 proposal. No build or install has occurred for 0.8.1.
+
+Remaining common seam: `new_directory` creates its destination on entry while
+the immutable Fibo `write_cache` requires that destination not exist. It cannot
+wrap the cache writer directly. Failed-cache rollback therefore remains a
+source-review follow-up, not a demonstrated regression or a local core patch.

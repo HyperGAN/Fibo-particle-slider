@@ -49,9 +49,14 @@ unqualified. MOSS owns current GPU scheduling.
 ## Install and CPU checks
 
 The proposed common lifecycle is pinned to commit
-`fd89e1c780ab5210cd1be98ec3b70977e6349379` (core 0.7.0), which is local and
+`32f6830f6402e85aa77b6631db64fcbbb2131f6b` (core 0.8.1), which is local and
 unpublished. It requires parent review and a published, approved source pin
 before the Git dependency can be installed from a public checkout.
+Both lock copies consume the common owner's canonical 30-file source hash map.
+This PG 0.9.1 proposal preserves the native backend/provenance bytes and adds
+native-only inference plus preflight/admission/observation hooks. The prior
+core 0.7.0 proposal remains a separate source cohort; its test results do not
+qualify the new proposal until the next scheduled CPU slot.
 The original PR1 receipts in `validation.json` describe the earlier
 `f797be1ea891f6aeeeb56c02402667bcf2a640a4` cohort; they are retained unchanged.
 The default installation does not include a pretrained model or diffusers.

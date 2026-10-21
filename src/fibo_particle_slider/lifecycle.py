@@ -1,5 +1,5 @@
 """Local staged Fibo factory: load, attach, cache, train and render in one session."""
-from particle_sliders.lifecycle import Backend, Binding, Capabilities, checkpoint_cleanup
+from particle_sliders.lifecycle import Backend, Binding, Capabilities
 
 
 def _local_path(value, name, *, directory=False):
@@ -76,45 +76,17 @@ def validate(options):
                 raise ValueError('Fibo capture seed is outside the public budget')
 
 
-def prepare(options, *, pipeline=None):
+def prepare(options, *, pipeline=None, before_update=None):
     from PIL import Image
     from particle_sliders.fibo_native import (
-        staged_pipeline, target_modules, FiboParticleSlider, FiboEditResponseAdapter,
-        FiboCachedRows, write_cache, build_fibo_game,
+        FORMAT, FiboCachedRows, write_cache, build_fibo_game,
     )
+    from .inference import INFERENCE, attach, observe, renderer
     manifest = options['manifest']
-    if options.get('dummy') and pipeline is None:
-        from .synthetic import Pipeline
-        pipeline = Pipeline()
-    if pipeline is None:
-        pipeline = staged_pipeline(options['model_dir'], manifest, device=options.get('device', 'cpu'))
-    restore = checkpoint_cleanup(pipeline.transformer)
-    targets = [(module, module.forward) for module in target_modules(pipeline.transformer).values()]
-    # A supplied pipeline remains caller-owned, including heterogeneous modes
-    # and parameter flags changed when the native adapter freezes components.
-    modules, parameters = {}, {}
-    for name in ('transformer', 'text_encoder', 'vae'):
-        component = getattr(pipeline, name, None)
-        if component is not None:
-            modules.update({id(module): (module, module.training) for module in component.modules()})
-            parameters.update({id(param): (param, param.requires_grad) for param in component.parameters()})
-    closed = False
-    # Fibo projections replace target forwards; cleanup must undo attachment.
-    def close():
-        nonlocal closed
-        if closed:
-            return
-        for module, original in targets:
-            module.forward = original
-        restore()
-        for module, training in modules.values():
-            module.training = training
-        for param, requires_grad in parameters.values():
-            param.requires_grad_(requires_grad)
-        closed = True
+    if before_update is not None and not callable(before_update):
+        raise ValueError('Fibo update admission must be a callable')
+    adapter, close = attach(options, pipeline=pipeline)
     try:
-        slider = FiboParticleSlider(pipeline.transformer, seed=options.get('seed', 7))
-        adapter = FiboEditResponseAdapter(pipeline, slider, model_identity=manifest)
         checksum = options.get('index_sha256')
         if checksum is None and options.get('dummy'):
             from pathlib import Path
@@ -144,9 +116,10 @@ def prepare(options, *, pipeline=None):
             model_identity=manifest, device=options.get('device', 'cpu'))
         game = build_fibo_game(adapter, provider, response_scale=options['response_scale'],
             total_steps=options.get('steps', 4), batch_size=options.get('batch', 2), seed=options.get('seed', 7))
-        def render(*, prompt, strength, seed, images, **native):
-            return adapter.render_edit(prompt, images, scale=strength, seed=seed, **native)
-        return Binding(game, close, render)
+        specification = INFERENCE.specification(adapter, model_identity=adapter.model_identity,
+            protocol=FORMAT, configuration={'dummy': options.get('dummy', False)})
+        return Binding(game, close, renderer(adapter), inference=specification,
+                       before_update=before_update, observation=lambda: observe(adapter))
     except BaseException:
         close()
         raise
@@ -158,10 +131,17 @@ def capabilities(options):
         base_precisions=('float32',) if options.get('dummy') else ('bfloat16',))
 
 
-BACKEND = Backend('fibo', capabilities({}), prepare, validate, capabilities)
+def preflight(options, request, staged):
+    from .inference import preflight_native
+    if staged.get('before_update') is not None and not callable(staged['before_update']):
+        raise ValueError('Fibo update admission must be a callable')
+    preflight_native(request)
 
 
-def synthetic_config(cache_dir, *, steps=4, cohort='fibo-synthetic-v1'):
+BACKEND = Backend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
+
+
+def synthetic_config(cache_dir, *, steps=4, cohort='fibo-core081-synthetic-v1'):
     """Config for the installed CPU example; the factory hides all construction."""
     from particle_sliders.lifecycle import SessionConfig
     return SessionConfig('fibo', cohort, dummy=True, cache_dir=str(cache_dir),
