@@ -2,7 +2,7 @@
   "model_id": "briaai/Fibo-2.0-edit-turbo",
   "model_revision": "177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7",
   "shared_repository": "https://github.com/HyperGAN/particle-sliders",
-  "shared_commit": "cb0e6c39a51d451fa6ed5e72169b66e12ac247d1",
+  "shared_commit": "fd89e1c780ab5210cd1be98ec3b70977e6349379",
   "shared_package": "packages/particle-sliders-core",
   "shared_module": "particle_sliders.fibo_native",
   "stack_base": "cdfb80a76b882b4b73861b12f555263bd64ffeb7",
