@@ -2,7 +2,7 @@
   "model_id": "briaai/Fibo-2.0-edit-turbo",
   "model_revision": "177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7",
   "shared_repository": "https://github.com/HyperGAN/particle-sliders",
-  "shared_commit": "f797be1ea891f6aeeeb56c02402667bcf2a640a4",
+  "shared_commit": "cb0e6c39a51d451fa6ed5e72169b66e12ac247d1",
   "shared_package": "packages/particle-sliders-core",
   "shared_module": "particle_sliders.fibo_native",
   "stack_base": "cdfb80a76b882b4b73861b12f555263bd64ffeb7",
@@ -15,6 +15,7 @@
     "status": "public source repository; implementation proposed through draft PR"
   },
   "qualification": "CPU fixtures and actual released PG only; no pretrained/GPU qualification",
-  "shared_backend_sha256": "2607d3ab51a0038e8cc26939bc650d8a4986e99fbbbf6c2c326b75c6e021a2c0",
-  "provenance_sha256": "710929d0b34a188a7327269cd765b69014cdd3f3987a37c5216679b1b67fc1e1"
+  "shared_backend_sha256": "30f38ddb93fa02fbd968f054b8fff66a0be6dd056e7e3f67e5147870cbf2bbe4",
+  "provenance_sha256": "710929d0b34a188a7327269cd765b69014cdd3f3987a37c5216679b1b67fc1e1",
+  "lifecycle": "particle_sliders.lifecycle.open_session"
 }

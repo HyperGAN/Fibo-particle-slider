@@ -1,4 +1,4 @@
-"""Thin standalone Fibo derivative; the reviewed shared core owns all behavior."""
+"""Fibo bindings for shared image sessions; native math remains in the core."""
 from particle_sliders.fibo_native import (
     DEFAULTS, DIFFUSERS_COMMIT, FORMAT, MODEL_ID, MODEL_REVISION,
     FiboCachedRows, FiboEditResponseAdapter, FiboParticleSlider,

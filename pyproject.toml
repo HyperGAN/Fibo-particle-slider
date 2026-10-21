@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE"}
 dependencies = [
-  "particle-sliders-core[serialization] @ git+https://github.com/HyperGAN/particle-sliders.git@f797be1ea891f6aeeeb56c02402667bcf2a640a4#subdirectory=packages/particle-sliders-core",
+  "particle-sliders-core[serialization] @ git+https://github.com/HyperGAN/particle-sliders.git@cb0e6c39a51d451fa6ed5e72169b66e12ac247d1#subdirectory=packages/particle-sliders-core",
 ]
 
 [project.optional-dependencies]
@@ -35,3 +35,6 @@ fibo_particle_slider = ["*.json", "*.md"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+
+[project.entry-points."particle_sliders.image_backends"]
+fibo = "fibo_particle_slider.lifecycle:BACKEND"

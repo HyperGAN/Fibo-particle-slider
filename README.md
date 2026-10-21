@@ -1,3 +1,5 @@
+For the new common session/CLI interface, see [LIFECYCLE.md](LIFECYCLE.md).
+
 # Fibo-particle-slider
 
 Experimental standalone derivative for
