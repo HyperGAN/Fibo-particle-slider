@@ -70,11 +70,25 @@ train/resume/export and the installed CLI delegate to shared core. No GAN
 mathematics or network definitions were copied into this product.
 
 The original `validation.json` stays bound to its original cohort. Historical
-milestone wheel evidence applies to `c68ab21`, not these edits. This source pass
-adds preflight and supplied-pipeline cleanup regression cases, but their
-execution, installed-wheel conformance and dependency guard are pending a
-parent-scheduled CPU slot. Syntax/JSON inspection and diff checks are the only
-fresh checks. Do not relabel original checkpoints with this factory identity.
+milestone wheel evidence applies to `c68ab21`, not these edits. The subsequent
+parent-scheduled CPU slot tested source commit
+`458b25764359c6c5daeaa6c9f04df47ef43dbdb0`: all nine lifecycle cases passed
+(seven new preflight/cleanup cases and two existing lifecycle cases), with no
+skips, in 2.46 seconds of pytest time. End-to-end execution took 4.12 seconds;
+sampled process peak was 364,474,368 bytes and host available memory stayed
+above 50,385,260,544 bytes. Execution used one thread, offline mocks, CPU-only
+torch and verified released PG sources. CUDA remained uninitialized and native
+model imports were blocked. No build, dependency install or shared-core edit
+was performed. Installed-wheel conformance and the dependency guard still
+require a separate slot. Do not relabel original checkpoints with this factory
+identity.
+
+Executed evidence confirms that product-owned cleanup is sufficient with this
+pinned core: supplied pipeline modes, parameter flags, forwards and checkpoint
+attributes restore on both close and injected game-setup failure. The narrow
+suite does not establish that central hooks are required. Atomic cache staging
+and a native-request preflight hook remain source-review suggestions, not
+failures demonstrated by these tests.
 
 Compact inference construction and matched-weight HyperGAN/HNDL definitions
 remain shared-owner work. HyperGAN owns run presentation through the common
