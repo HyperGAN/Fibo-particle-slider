@@ -49,10 +49,10 @@ unqualified. MOSS owns current GPU scheduling.
 ## Install and CPU checks
 
 The proposed common lifecycle is pinned to commit
-`32f6830f6402e85aa77b6631db64fcbbb2131f6b` (core 0.8.1), which is local and
+`f6807a91546e43e198645a3f8925d2dc7c9e03b4` (core 0.8.2), which is local and
 unpublished. It requires parent review and a published, approved source pin
 before the Git dependency can be installed from a public checkout.
-Both lock copies consume the common owner's canonical 30-file source hash map.
+Both lock copies consume the common owner's canonical 38-file source hash map.
 This PG 0.9.1 proposal preserves the native backend/provenance bytes and adds
 native-only inference plus preflight/admission/observation hooks. The prior
 core 0.7.0 proposal remains a separate source cohort; its test results do not

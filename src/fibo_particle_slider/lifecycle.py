@@ -141,7 +141,7 @@ def preflight(options, request, staged):
 BACKEND = Backend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
 
 
-def synthetic_config(cache_dir, *, steps=4, cohort='fibo-core081-synthetic-v1'):
+def synthetic_config(cache_dir, *, steps=4, cohort='fibo-core082-synthetic-v1'):
     """Config for the installed CPU example; the factory hides all construction."""
     from particle_sliders.lifecycle import SessionConfig
     return SessionConfig('fibo', cohort, dummy=True, cache_dir=str(cache_dir),

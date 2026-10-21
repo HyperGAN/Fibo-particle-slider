@@ -1,6 +1,6 @@
 # Fibo Edit Turbo common lifecycle
 
-Proposed local shared pin: `32f6830f6402e85aa77b6631db64fcbbb2131f6b` / core 0.8.1.
+Proposed local shared pin: `f6807a91546e43e198645a3f8925d2dc7c9e03b4` / core 0.8.2.
 Unpublished; exact-head review is required before draft publication.
 
 This derivative registers backend `fibo` for `particle_sliders.lifecycle`.
@@ -147,3 +147,40 @@ Remaining common seam: `new_directory` creates its destination on entry while
 the immutable Fibo `write_cache` requires that destination not exist. It cannot
 wrap the cache writer directly. Failed-cache rollback therefore remains a
 source-review follow-up, not a demonstrated regression or a local core patch.
+
+## Core 0.8.2 CLI qualification candidate
+
+The preserved core 0.8.1 proposal at
+`2911f71f8d3451c20c060d409a189f083548226a` passed all 17 installed lifecycle,
+native-only inference and distribution tests in the next scheduled slot:
+zero skips/failures, 4.67 seconds pytest time. It remains on local branch
+`review/fibo-core081-qualified`. The tests imported an extracted product wheel
+and the canonical core 0.8.1 wheel, with no checkout imports.
+
+To close the CLI export seam, this subsequent proposal uses the explicitly
+cleared core 0.8.2 commit
+`f6807a91546e43e198645a3f8925d2dc7c9e03b4`, consuming its canonical 38-file
+source/data map and official PG 0.9.1 profile. Native backend/provenance and
+GAN implementation bytes remain unchanged. New fixture configurations use
+cohort `fibo-core082-synthetic-v1`; earlier packets are not rebound.
+
+The core 0.8.2 CLI provides both packet kinds directly:
+
+```bash
+particle-slider train --config config.json --out new-run --selection ema --export-format both
+particle-slider infer --artifact new-run/adapter-v2.pt --native native.json --out latent.pt
+```
+
+The default training export remains v1. `both` writes `adapter.pt` and
+`adapter-v2.pt` plus their hashes in the run manifest; `v2` selects only the
+native-only inference artifact. Native-only inference needs local staged base
+options for pretrained execution and never requires the training cache.
+New CLI coverage includes a split resume, both export receipts, removal of the
+mock training cache, and inference in a fresh process where game, critic,
+optimizer and cache constructors are forbidden. Execution results for this
+new proposal belong to its exact source/artifact receipt, not the earlier pass.
+
+All evidence remains CPU mocks only. The official Turbo target is EDIT-only,
+not intended for fine-tuning, gated under CC BY-NC 4.0, and still experimental
+for training. No model access terms are accepted, no weights are fetched and
+no pretrained gradients, memory fit, decode parity or edit quality are claimed.

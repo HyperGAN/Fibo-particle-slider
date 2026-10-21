@@ -7,7 +7,7 @@ import torch
 from PIL import Image
 
 from particle_sliders.inference import open_inference
-from particle_sliders.lifecycle import UnsupportedOperation
+from particle_sliders.lifecycle import CheckpointError, UnsupportedOperation
 from fibo_particle_slider.inference import INFERENCE
 from fibo_particle_slider.lifecycle import BACKEND, synthetic_config
 
@@ -99,3 +99,19 @@ def test_update_admission_decline_preserves_training_state(tmp_path):
         with pytest.raises(UnsupportedOperation, match='admission rejected'):
             training.step()
         assert training.checkpoint()['sha256'] == before
+
+
+@pytest.mark.parametrize('damage', ['checksum', 'cohort'])
+def test_invalid_training_restore_preserves_live_session(tmp_path, damage):
+    from particle_sliders.pg09 import _hash
+    with BACKEND.open(synthetic_config(tmp_path / 'cache')) as training:
+        before = training.checkpoint()
+        packet = deepcopy(before)
+        if damage == 'checksum':
+            packet['sha256'] = 'invalid'
+        else:
+            packet['manifest']['config']['cohort'] = 'other-cohort'
+            packet['sha256'] = _hash({key: value for key, value in packet.items() if key != 'sha256'})
+        with pytest.raises(CheckpointError):
+            training.restore(packet)
+        assert training.checkpoint()['sha256'] == before['sha256']
