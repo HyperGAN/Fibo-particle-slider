@@ -14,7 +14,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest>=8", "build>=1"]
+test = ["pytest>=8", "build>=1", "pillow>=10"]
+mock = ["pillow>=10"]
 native = [
   "diffusers @ git+https://github.com/muhammadali-afridi/diffusers.git@60f95274bf07ed705d675eb09d99b6ae125b601e",
   "transformers>=4.57", "accelerate", "pillow>=10",

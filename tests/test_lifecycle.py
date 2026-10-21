@@ -49,3 +49,57 @@ def test_render_preflight_requires_reference_images(tmp_path):
     with pytest.raises(UnsupportedOperation, match='reference'):
         open_session(config, operation='render')
     assert not (tmp_path / 'cache').exists()
+
+
+@pytest.mark.parametrize('change', [
+    {'dummy': 'yes'}, {'response_scale': True}, {'response_scale': '1'},
+    {'index_sha256': 'not-a-checksum'}, {'pairs': []},
+])
+def test_invalid_factory_options_fail_before_pipeline_allocation(tmp_path, monkeypatch, change):
+    from particle_sliders.lifecycle import SessionConfig
+    from fibo_particle_slider.synthetic import Pipeline
+    def forbidden(*args, **kwargs):
+        raise AssertionError('invalid configuration allocated a pipeline')
+    monkeypatch.setattr(Pipeline, '__init__', forbidden)
+    options = synthetic_config(tmp_path / 'cache').options
+    options.update(change)
+    with pytest.raises(ValueError):
+        open_session(SessionConfig('fibo', 'invalid-fibo-preflight', **options))
+    assert not (tmp_path / 'cache').exists()
+
+
+@pytest.mark.parametrize('setup_failure', [False, True])
+def test_supplied_mock_pipeline_restores_host_ownership(tmp_path, monkeypatch, setup_failure):
+    import particle_sliders.fibo_native as native
+    from fibo_particle_slider.lifecycle import BACKEND
+    from fibo_particle_slider.synthetic import Pipeline
+    pipeline = Pipeline()
+    pipeline.transformer.train()
+    pipeline.transformer.noise_refiner[0].eval()
+    pipeline.vae.eval()
+    next(pipeline.text_encoder.parameters()).requires_grad_(False)
+    pipeline.transformer.gradient_checkpointing = False
+    original_checkpoint = object()
+    pipeline.transformer._gradient_checkpointing_func = original_checkpoint
+    roots = [pipeline.transformer, pipeline.text_encoder, pipeline.vae]
+    modes = [(m, m.training) for root in roots for m in root.modules()]
+    flags = [(p, p.requires_grad) for root in roots for p in root.parameters()]
+    forwards = [(m, m.forward) for m in native.target_modules(pipeline.transformer).values()]
+    if setup_failure:
+        def fail(*args, **kwargs):
+            raise RuntimeError('injected game setup failure')
+        monkeypatch.setattr(native, 'build_fibo_game', fail)
+    config = synthetic_config(tmp_path / 'cache', cohort='fibo-owned-pipeline-v2')
+    if setup_failure:
+        with pytest.raises(RuntimeError, match='injected game setup failure'):
+            BACKEND.open(config, pipeline=pipeline)
+    else:
+        with BACKEND.open(config, pipeline=pipeline) as session:
+            assert session.game.backend.pipeline is pipeline
+            assert all(not p.requires_grad for p in pipeline.transformer.parameters())
+        session.close()
+    assert all(m.training == training for m, training in modes)
+    assert all(p.requires_grad == requires_grad for p, requires_grad in flags)
+    assert all(m.forward == forward for m, forward in forwards)
+    assert pipeline.transformer.gradient_checkpointing is False
+    assert pipeline.transformer._gradient_checkpointing_func is original_checkpoint

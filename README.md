@@ -48,8 +48,12 @@ unqualified. MOSS owns current GPU scheduling.
 
 ## Install and CPU checks
 
-The shared backend is pinned to commit
-`f797be1ea891f6aeeeb56c02402667bcf2a640a4`, which is still under draft review.
+The proposed common lifecycle is pinned to commit
+`fd89e1c780ab5210cd1be98ec3b70977e6349379` (core 0.7.0), which is local and
+unpublished. It requires parent review and a published, approved source pin
+before the Git dependency can be installed from a public checkout.
+The original PR1 receipts in `validation.json` describe the earlier
+`f797be1ea891f6aeeeb56c02402667bcf2a640a4` cohort; they are retained unchanged.
 The default installation does not include a pretrained model or diffusers.
 Install in an isolated environment with your reviewed CPU PyTorch build:
 
@@ -57,6 +61,10 @@ Install in an isolated environment with your reviewed CPU PyTorch build:
 python -m pip install '.[test]'
 CUDA_VISIBLE_DEVICES='' HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 python -m pytest -q
 ```
+
+These commands are for a separately admitted verification slot. No suites,
+dependency installation, model loading or builds were run during the fresh
+source audit; current verification status is in [LIFECYCLE.md](LIFECYCLE.md).
 
 The tests build from an extracted source distribution, verify wheel contents
 and source identity, and import the installed wrapper with native model
