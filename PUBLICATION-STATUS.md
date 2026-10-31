@@ -11,13 +11,16 @@ it is not an import-only adoption. CPU tests use a tiny synthetic EDIT host and
 actual released ParticleGAN0.9.4. They do not qualify pretrained model weights,
 GPU gradients, native BF16 behavior, memory, decoder parity or edit quality.
 [The installed qualification receipt](QUALIFICATION-20261031.md) records
-34 product/review cases and 3 distribution cases, all passing without skips.
+35 product/review cases and 3 distribution cases, all passing without skips.
 Text-to-image is unavailable and remains refused before model construction.
 
 The core owner's exact candidate is
-`4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`. It was CPU-qualified locally but
-was not publicly fetchable at this audit. Public availability of that exact
-commit is a merge/install prerequisite. No different SHA is substituted.
+`4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`. It is now publicly reachable on
+`qualify/core012-cutpoints-20261031`. All51 locked source/data files match its
+public Git tree. A clean environment installed that exact core and HyperGAN
+VCS commit, official CPU Torch2.6.0, PG0.9.4 and HNDL0.10 with normal dependency
+resolution; `pip check` passes. The earlier source-publication blocker is
+resolved. Coordinated review and native qualification remain separate.
 
 No GitHub workflow or release job exists in the inspected repository. This
 change publishes source through a draft PR only; it does not publish packages,

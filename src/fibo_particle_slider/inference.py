@@ -131,9 +131,10 @@ def preflight_native(request, *, render_outputs=('pil', 'latent')):
             raise ValueError('Fibo native dimensions must be positive integers')
 
 
-def renderer(adapter):
+def renderer(adapter, *, render_outputs):
     def render(*, prompt, strength, seed, images, **native):
-        preflight_native(dict(operation='render', native=dict(native, prompt=prompt, images=images)))
+        preflight_native(dict(operation='render', native=dict(native, prompt=prompt, images=images)),
+                         render_outputs=render_outputs)
         # CLI preflight accepts paths; the sampler always receives image objects.
         from PIL import Image
         def load(value):
@@ -183,7 +184,8 @@ def prepare(options, spec):
     adapter, close = attach(runtime)
     try:
         identity = native_identity(adapter, model_identity=adapter.model_identity, protocol=FORMAT)
-        return InferenceBinding(adapter.network, identity, close, render=renderer(adapter),
+        return InferenceBinding(adapter.network, identity, close, render=renderer(adapter,
+            render_outputs=capabilities(spec.configuration).render_outputs),
                                 observation=lambda: observe(adapter))
     except BaseException:
         close()

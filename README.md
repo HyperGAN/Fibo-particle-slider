@@ -16,16 +16,23 @@ product-local GAN loss, optimizer, trainer or replacement sampler.
 | Native model | `briaai/Fibo-2.0-edit-turbo`, revision `177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7` |
 | Native Diffusers | custom commit `60f95274bf07ed705d675eb09d99b6ae125b601e` |
 
-The exact core candidate must be published by its owner before a fresh VCS
-installation can resolve. This draft is not ready to merge until that immutable
-commit is publicly fetchable. Do not substitute another core or weaken source
-checks. [Publication status](PUBLICATION-STATUS.md) records this prerequisite.
+The exact core candidate is publicly reachable on
+`qualify/core012-cutpoints-20261031`. Its51 locked source/data files were
+independently matched to that public commit's Git tree. A fresh CPU environment
+resolved and installed the exact VCS dependencies with official Torch2.6.0+cpu;
+[qualification details](QUALIFICATION-20261031.md) distinguish that clean lane
+from the earlier Torch2.14.1+cpu fixtures. Coordinated review remains required.
+Do not substitute another core or weaken source checks.
 The two `backend.lock.json` copies bind the exact installed core source/data
-file set and hashes, including rejection of additional Python/extension modules. Core verifies the released PG sources, HNDL closure, HyperGAN builder
-closure and clean build provenance before the product allocates a pipeline.
+file set and hashes within `particle_sliders` and `concept_slider_core`,
+including rejection of additional Python/extension modules there. Generated
+`__pycache__` entries are excluded from inspection. This is an installation
+consistency check, not a global tamper-proof security boundary; writing to those
+cache directories already requires access to the installation. Core verifies
+the released PG sources, HNDL closure, HyperGAN builder closure and clean build
+provenance before the product allocates a pipeline.
 
-Install in a fresh Python 3.11–3.14 environment once the exact core commit is
-available:
+Install in a fresh Python 3.11–3.14 environment with a reviewed CPU Torch build:
 
 ```bash
 python -m pip install '.[test,mock]'
@@ -40,14 +47,15 @@ model runtime; it is not needed for CPU fixtures.
 
 | Runtime lane | Torch / torchvision | Evidence |
 | --- | --- | --- |
-| Installed CPU fixture | Torch2.14.1+cpu; no torchvision execution required | Tiny EDIT host, real HNDL/PG tests |
+| Clean supported CPU install | Official Torch2.6.0+cpu; no torchvision execution required | Fresh dependency-resolving install and real HNDL/PG fixture tests |
+| Earlier CPU fixture | Torch2.14.1+cpu; no torchvision execution required | Real HNDL/PG tests with read-only dependency reuse |
 | Optional `[native]` demo runtime | Torch2.11.0 / torchvision0.26.0 | Inspected upstream pair; not installed, resolved or pretrained-qualified here |
 
 Use separate environments for these lanes: adding `[native]` selects Torch2.11.0
-and does not reproduce the CPU fixture receipt. Both Torch versions satisfy
+and does not reproduce either CPU fixture receipt. All three Torch versions satisfy
 core's `>=2.6,<3` declaration; this is not evidence that pretrained execution works
 on either. The inspected native pair is retained without an untested upgrade.
- Native dependency resolution,
+Native dependency resolution,
 pretrained gradients, decoder parity, GPU memory and image quality are unrun.
 No model weights are downloaded by the fixture or bundled in the package.
 

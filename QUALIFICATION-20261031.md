@@ -1,6 +1,6 @@
 # Installed CPU qualification — 2026-10-31
 
-New runtime: Python3.12.15, Torch2.14.1+cpu, product0.2.0,
+Earlier fixture runtime: Python3.12.15, Torch2.14.1+cpu, product0.2.0,
 particle-sliders-core0.12.0 at `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231`,
 ParticleGAN0.9.4, HNDL0.10.0, clean HyperGAN develop
 `5f368a3770cf5bdae0448995c9f76e29af8049f7`, Pillow13.0.0,
@@ -11,10 +11,10 @@ not a pristine dependency resolver or native runtime installation result.
 
 | Executed check | Result |
 | --- | --- |
-| Installed lifecycle, inference, CLI, modern HNDL and review regressions | 34 passed, zero skipped |
+| Installed lifecycle, inference, CLI, modern HNDL and review regressions | 35 passed, zero skipped on the earlier Torch2.14.1+cpu fixture lane |
 | Extracted sdist → wheel packaging, installed offline import and provenance | 3 passed, zero skipped |
 | Original S082 product wheel, separate core0.8.2/PG0.9.1 environment | 17 passed, zero skipped |
-| Actual one-update S082 training checkpoint restore into modern product | Refused; modern checkpoint hash unchanged |
+| Actual one-update S082 training checkpoint restore into modern product (out-of-repository receipt) | Refused; modern checkpoint hash unchanged |
 | Original S082 lock comparison against public source | Byte-for-byte identical |
 | Selected mandatory distribution constraints | Passed; native extra excluded |
 | Diff whitespace check | Passed |
@@ -35,8 +35,8 @@ no weights downloaded, no GPU work run, and CUDA remained uninitialized.
 The native `[native]` dependency set was not installed or resolved.
 
 No repository workflow/automatic CI existed at the inspected public base.
-The draft must remain blocked until its exact shared-core commit is publicly
-fetchable and coordinated review is complete. Original `validation.json` and
+The exact shared-core commit is now publicly reachable and independently
+verified; coordinated review remains required. Original `validation.json` and
 native-guide receipts keep their earlier S082 scope and counts.
 
 ## Review findings and response
@@ -54,3 +54,40 @@ run passed3 cases in2.54s. The original17-case S082 pass is historical evidence
 for its unchanged source/environment, not a new execution of that lane.
 Core deserialization and cross-repository pin/publication atomicity remain
 central-owner review items. No shared-core source or historical lock was edited.
+
+The genuine S082 checkpoint result is an **out-of-repository execution receipt**,
+not an in-repository reusable binary fixture or pytest case. The original
+one-step packet was produced with the original installed S082 product/core/PG
+environment; its refusal and unchanged modern state were recorded separately.
+The reusable in-repository tests cover network/source-profile refusal with
+bounded generated fixtures and do not claim to regenerate that historical packet.
+
+## Bounded final polish and clean installation
+
+Renderer callbacks now receive the actual runtime output capabilities in both
+training and native-only inference. A direct-callback regression forbids the
+sampler and verifies that both callbacks reject PIL output for CPU fixtures,
+even without the shared session wrapper's capability check.
+
+Core commit `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231` is publicly reachable on
+`qualify/core012-cutpoints-20261031`; all51 locked source/data files match the
+public Git tree's blob identities. The previous publication blocker is resolved.
+A new virtual environment with no borrowed site-packages completed normal
+pip dependency resolution/installation from that exact core VCS commit and
+HyperGAN `5f368a3770cf5bdae0448995c9f76e29af8049f7`, plus PyPI dependencies.
+It uses the official Torch2.6.0+cpu cp312 wheel, independently checked against
+the public PyTorch index SHA256. `pip check` reports no broken requirements;
+installed VCS `direct_url.json` receipts and the verified HyperGAN/HNDL builder
+confirm the exact identities. No native extra or pretrained weights were fetched.
+
+The README limits module inspection to `particle_sliders` and
+`concept_slider_core`. Generated `__pycache__` entries are excluded; the check
+is installation consistency evidence, not a global tamper-proof security boundary.
+Writing to cache directories already requires installation access.
+
+Clean Torch2.6.0+cpu execution: **35 installed cases passed in14.84s** and
+**3 extracted-sdist/wheel/import/provenance cases passed in2.40s**, zero skipped.
+The installed tests ran outside the source checkout with all product/core/HNDL/
+HyperGAN/Torch modules imported from the new environment's own site-packages.
+The preceding read-only-dependency Torch2.14.1+cpu lane passed the same35 cases
+in14.71s. These are CPU software checks, not native model qualification.

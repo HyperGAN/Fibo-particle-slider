@@ -93,3 +93,20 @@ def test_pil_reference_inputs_remain_valid_for_latent_fixture_outputs(tmp_path):
     with open_inference(packet, backend=INFERENCE, references=True, output_type='latent',
                         native_request=native) as inference:
         assert inference.render(**native).images[0].shape == (1, 4, 2, 2)
+
+
+def test_renderer_callbacks_enforce_fixture_outputs_without_session_wrapper(tmp_path, monkeypatch):
+    from particle_sliders.fibo_native import FiboEditResponseAdapter
+    def forbidden(*args, **kwargs):
+        raise AssertionError('renderer reached sampling for unsupported PIL output')
+    monkeypatch.setattr(FiboEditResponseAdapter, 'render_edit', forbidden)
+    arguments = dict(prompt='keep jacket', strength=1., seed=7,
+                     images=[Image.new('RGB', (8, 8))], output_type='pil')
+    with BACKEND.open(synthetic_config(tmp_path / 'cache')) as training:
+        packet = training.export_inference()
+        with pytest.raises(ValueError, match='output_type'):
+            training.binding.render(**arguments)
+    with open_inference(packet, backend=INFERENCE, references=True, output_type='latent',
+                        native_request=dict(prompt='keep jacket', images=arguments['images'])) as inference:
+        with pytest.raises(ValueError, match='output_type'):
+            inference.binding.render(**arguments)

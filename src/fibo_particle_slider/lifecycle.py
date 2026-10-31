@@ -122,7 +122,8 @@ def prepare(options, *, pipeline=None, before_update=None):
         specification = INFERENCE.specification(adapter, model_identity=adapter.model_identity,
             protocol=FORMAT, configuration={'dummy': options.get('dummy', False),
                            'network_profile': adapter.slider.network_profile})
-        return Binding(game, close, renderer(adapter), inference=specification,
+        return Binding(game, close, renderer(adapter, render_outputs=capabilities(options).render_outputs),
+                       inference=specification,
                        before_update=before_update, observation=lambda: observe(adapter))
     except BaseException:
         close()
