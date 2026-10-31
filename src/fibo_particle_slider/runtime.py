@@ -2,6 +2,8 @@
 from importlib.metadata import version
 
 PROFILE = 'hypergan-hndl-v2'
+CORE_COMMIT = 'a794e3b4a8813b012f2c4faa3da82b78d4a90214'
+CORE_VERSION = '0.12.0'
 
 
 def validate_profile(profile):
@@ -13,19 +15,19 @@ def validate_profile(profile):
     import particle_sliders
     from pathlib import Path
     lock = json.loads(files('fibo_particle_slider').joinpath('backend.lock.json').read_text())
+    if lock['shared_commit'] != CORE_COMMIT or lock['shared_version'] != CORE_VERSION:
+        raise ValueError('Fibo source lock differs from the cleared modern cohort')
     source_root = Path(particle_sliders.__file__).resolve().parent.parent
     actual = {}
     for package in ('particle_sliders', 'concept_slider_core'):
         for path in (source_root / package).rglob('*'):
-            if (path.is_file() and '__pycache__' not in path.parts and
-                    (path.suffix in ('.py', '.pyc', '.pyo', '.pyi', '.so', '.pyd', '.json', '.hndl')
-                     or path.name == 'LICENSE')):
+            if path.is_file() and '__pycache__' not in path.parts:
                 actual[path.relative_to(source_root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
     if actual != lock['shared_source_sha256']:
         raise ValueError('Fibo core source closure differs; use the exact pinned cohort')
     from particle_sliders.pg094 import PG_VERSION, PG_SOURCE_PROFILE
     from particle_sliders.pg09 import _released_sources
-    if version('particle-sliders-core') != '0.12.0' or PG_VERSION != '0.9.4':
+    if version('particle-sliders-core') != CORE_VERSION or PG_VERSION != '0.9.4':
         raise ValueError('Fibo modern cohort requires core0.12.0 and ParticleGAN0.9.4')
     _released_sources(profile=PG_SOURCE_PROFILE)
     if profile == PROFILE:

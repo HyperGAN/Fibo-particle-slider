@@ -9,20 +9,19 @@ product-local GAN loss, optimizer, trainer or replacement sampler.
 
 | Component | Required identity |
 | --- | --- |
-| particle-sliders-core | 0.12.0, commit `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231` |
+| particle-sliders-core | 0.12.0, commit `a794e3b4a8813b012f2c4faa3da82b78d4a90214` |
 | ParticleGAN | official 0.9.4, verified release source profile |
 | HyperGAN | develop commit `5f368a3770cf5bdae0448995c9f76e29af8049f7`, clean build provenance |
 | HNDL | 0.10.0, `hypergan-hndl-v2` |
 | Native model | `briaai/Fibo-2.0-edit-turbo`, revision `177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7` |
 | Native Diffusers | custom commit `60f95274bf07ed705d675eb09d99b6ae125b601e` |
 
-The exact core candidate is publicly reachable on
-`qualify/core012-cutpoints-20261031`. Its51 locked source/data files were
-independently matched to that public commit's Git tree. A fresh CPU environment
-resolved and installed the exact VCS dependencies with official Torch2.6.0+cpu;
-[qualification details](QUALIFICATION-20261031.md) distinguish that clean lane
-from the earlier Torch2.14.1+cpu fixtures. Coordinated review remains required.
-Do not substitute another core or weaken source checks.
+The active modern candidate selects the cleared immutable source above. Its
+recursive 51-file source/data closure is checked against both built artifacts;
+[the migration guide](MIGRATION-A794.md) records reproducible checks and packet
+identity changes. Prior `4abc` preview packets remain bound to their original
+product/core source environment. They are not relabeled or converted.
+Coordinated Claude RETURN review is required before landing this product pin.
 The two `backend.lock.json` copies bind the exact installed core source/data
 file set and hashes within `particle_sliders` and `concept_slider_core`,
 including rejection of additional Python/extension modules there. Generated
@@ -47,11 +46,11 @@ model runtime; it is not needed for CPU fixtures.
 
 | Runtime lane | Torch / torchvision | Evidence |
 | --- | --- | --- |
-| Clean supported CPU install | Official Torch2.6.0+cpu; no torchvision execution required | Fresh dependency-resolving install and real HNDL/PG fixture tests |
-| Earlier CPU fixture | Torch2.14.1+cpu; no torchvision execution required | Real HNDL/PG tests with read-only dependency reuse |
-| Optional `[native]` demo runtime | Torch2.11.0 / torchvision0.26.0 | Inspected upstream pair; not installed, resolved or pretrained-qualified here |
+| Clean supported CPU install | Official Torch 2.6.0+cpu; no torchvision execution required | Fresh dependency-resolving install and real HNDL/PG fixture tests |
+| Earlier CPU fixture | Torch 2.14.1+cpu; no torchvision execution required | Real HNDL/PG tests with read-only dependency reuse |
+| Optional `[native]` demo runtime | Torch 2.11.0 / torchvision 0.26.0 | Inspected upstream pair; not installed, resolved or pretrained-qualified here |
 
-Use separate environments for these lanes: adding `[native]` selects Torch2.11.0
+Use separate environments for these lanes: adding `[native]` selects Torch 2.11.0
 and does not reproduce either CPU fixture receipt. All three Torch versions satisfy
 core's `>=2.6,<3` declaration; this is not evidence that pretrained execution works
 on either. The inspected native pair is retained without an untested upgrade.
@@ -85,15 +84,21 @@ in a **separate environment**:
 python -m pip install -r requirements-s082.txt
 ```
 
-This selects product `c45be09f847542ae17f03872dea84663f9f44bb5`, core0.8.2
-`f6807a91546e43e198645a3f8925d2dc7c9e03b4`, and PG0.9.1. Its original lock is
+This selects product `c45be09f847542ae17f03872dea84663f9f44bb5`, core 0.8.2
+`f6807a91546e43e198645a3f8925d2dc7c9e03b4`, and PG 0.9.1. Its original lock is
 preserved byte-for-byte at `cohorts/s082/backend.lock.json`. Preserve original
 source/model/data receipts with those runs. The modern product uses a new
 `fibo-hypergan-hndl-v2-cpu` fixture cohort. It refuses historical source/profile
 checkpoints rather than relabeling or automatically converting them. The optional
-`legacy` network choice in core0.12 is a fresh comparison cohort, not an S082
+`legacy` network choice in core 0.12 is a fresh comparison cohort, not an S082
 checkpoint loader.
 
 See [LIFECYCLE.md](LIFECYCLE.md) for session, CLI and native-only inference,
 [NATIVE-GUIDE.md](NATIVE-GUIDE.md) for historical native EDIT protocol evidence,
 and [PUBLICATION-STATUS.md](PUBLICATION-STATUS.md) for current scope and blockers.
+
+The prior modern preview is preserved separately at product
+`50a70253fd14930671ad4fc52cbca6d6b13ce6a6`; use
+`cohorts/preview-core4abc/requirements.txt` in its original environment to
+continue those runs. Current native-only artifacts explicitly bind the cleared
+core commit and reject earlier preview specifications.

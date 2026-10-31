@@ -13,7 +13,7 @@ from particle_sliders.inference import open_inference
 from particle_sliders.lifecycle import SessionConfig
 
 
-@pytest.mark.parametrize('damage', ['extra.py', 'extra.pyc', 'extra.so', 'missing', 'changed'])
+@pytest.mark.parametrize('damage', ['extra.py', 'extra.pyc', 'extra.so', 'extra.bin', 'missing', 'changed'])
 def test_source_closure_rejects_additions_and_mutations_before_allocation(tmp_path, monkeypatch, damage):
     import particle_sliders
     from fibo_particle_slider.synthetic import Pipeline

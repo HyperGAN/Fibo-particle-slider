@@ -36,7 +36,7 @@ def test_native_only_raw_ema_render_after_training_cache_removed(tmp_path, monke
     monkeypatch.setattr(torch.optim.Optimizer, '__init__', forbidden)
     before = torch.get_rng_state().clone()
     for selection, packet in packets.items():
-        assert set(packet['specification']['configuration']) == {'dummy', 'network_profile'}
+        assert set(packet['specification']['configuration']) == {'dummy', 'network_profile', 'core_commit'}
         with open_inference(packet, backend=INFERENCE, references=True, output_type='latent',
                             native_request=native) as inference:
             assert inference.selection == selection

@@ -9,7 +9,7 @@ owns staged loading, ordered references, masks, validation and cleanup.
 `synthetic_config(cache_dir)` selects `hypergan-hndl-v2` and cohort
 `fibo-hypergan-hndl-v2-cpu`. It constructs the actual HNDL routed projections
 and HNDL spatial critic through HyperGAN's verified builder. Shared
-`build_fibo_game` executes released PG0.9.4 `bispf_optimized` on the original
+`build_fibo_game` executes released PG 0.9.4 `bispf_optimized` on the original
 spatial velocity geometry. No flat-vector reshaping, width admission bypass,
 new loss or new optimizer is introduced.
 
@@ -48,7 +48,7 @@ particle-slider infer --artifact new-run/adapter-v2.pt --native native.json --ou
 `both` writes the strict v1 inference artifact and native-only v2 artifact with
 hashes in the run manifest. Native-only reload does not construct training
 rows, critic, game or optimizer. Its export specification explicitly binds
-`dummy` and `network_profile`; reload cannot silently select a different graph.
+`dummy`, `network_profile` and the exact `core_commit`; reload cannot silently select a different graph.
 For native model rendering, supply the original local staging receipt and
 model directory through `--runtime`. Rendering requires references, accepts
 strengths 0–1 and uses the native four-step guidance-1 sampler.
@@ -86,3 +86,8 @@ actual output set; an explicit `render_outputs` may narrow that set but cannot
 widen it. Missing identity is refused rather than assuming native outputs.
 Direct fixture calls without `output_type` explicitly forward `latent` to the
 sampler, preventing an implicit native PIL default from escaping preflight.
+
+The active modern source is now core `a794e3b4a8813b012f2c4faa3da82b78d4a90214`.
+See MIGRATION-A794.md for lock regeneration and separate preview installation.
+The existing cohort labels stay unchanged; packet source identities remain
+strict, so reusing a label does not migrate an old checkpoint or native artifact.

@@ -44,7 +44,9 @@ def test_distribution_retains_sources_and_no_weights(distribution):
         names = {str(Path(name).relative_to(Path(name).parts[0])) for name in handle.getnames()}
     assert {'README.md', 'NATIVE-GUIDE.md', 'backend.lock.json', 'validation.json', 'VALIDATION.md',
             'configs/jacket-edit.json', 'tests/test_distribution.py', 'PUBLICATION-STATUS.md',
-            'requirements-s082.txt', 'cohorts/s082/backend.lock.json', 'QUALIFICATION-20261031.md'} <= names
+            'requirements-s082.txt', 'cohorts/s082/backend.lock.json', 'QUALIFICATION-20261031.md', 'MIGRATION-A794.md',
+            'tools/update_core_lock.py', 'cohorts/preview-core4abc/backend.lock.json',
+            'cohorts/preview-core4abc/requirements.txt'} <= names
     wheel, = (distribution / 'dist').glob('*.whl')
     with zipfile.ZipFile(wheel) as handle:
         names = set(handle.namelist())

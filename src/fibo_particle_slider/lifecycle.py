@@ -119,9 +119,10 @@ def prepare(options, *, pipeline=None, before_update=None):
             model_identity=manifest, device=options.get('device', 'cpu'))
         game = build_fibo_game(adapter, provider, response_scale=options['response_scale'],
             total_steps=options.get('steps', 4), batch_size=options.get('batch', 2), seed=options.get('seed', 7))
+        from .runtime import CORE_COMMIT
         specification = INFERENCE.specification(adapter, model_identity=adapter.model_identity,
             protocol=FORMAT, configuration={'dummy': options.get('dummy', False),
-                           'network_profile': adapter.slider.network_profile})
+                           'network_profile': adapter.slider.network_profile, 'core_commit': CORE_COMMIT})
         return Binding(game, close, renderer(adapter, render_outputs=capabilities(options).render_outputs),
                        inference=specification,
                        before_update=before_update, observation=lambda: observe(adapter))

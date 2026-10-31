@@ -1,0 +1,2 @@
+# Original preview environment only. Never relabel packets for a newer core.
+fibo-particle-slider[test,mock] @ git+https://github.com/HyperGAN/Fibo-particle-slider.git@50a70253fd14930671ad4fc52cbca6d6b13ce6a6

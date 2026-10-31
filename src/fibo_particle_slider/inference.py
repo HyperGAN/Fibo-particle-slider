@@ -160,7 +160,9 @@ def renderer(adapter, *, render_outputs=None):
 
 
 def validate(options, spec):
-    if (set(spec.configuration) != {'dummy', 'network_profile'} or
+    from .runtime import CORE_COMMIT
+    if (set(spec.configuration) != {'dummy', 'network_profile', 'core_commit'} or
+            spec.configuration.get('core_commit') != CORE_COMMIT or
             type(spec.configuration['dummy']) is not bool):
         raise ValueError('unsupported Fibo native-only configuration')
     from .runtime import validate_profile
