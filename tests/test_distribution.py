@@ -58,6 +58,21 @@ def test_distribution_retains_sources_and_no_weights(distribution):
         assert lock['shared_commit'] in dependency and '#subdirectory=packages/particle-sliders-core' in dependency
         assert 'fibo-hndl' in dependency and 'serialization' in dependency
         assert lock['network_profile'] == 'hypergan-hndl-v2'
+        assert 'Shared, https://github.com/HyperGAN/particle-sliders' in metadata.get_all('Project-URL')
+        from packaging.requirements import Requirement
+        requirements = [Requirement(value) for value in metadata.get_all('Requires-Dist')]
+        native_torch = next(r for r in requirements if r.name == 'torch')
+        native_vision = next(r for r in requirements if r.name == 'torchvision')
+        assert str(native_torch.specifier) == '==2.11.0'
+        assert str(native_vision.specifier) == '==0.26.0'
+        assert native_torch.marker.evaluate({'extra': 'native'})
+        assert not native_torch.marker.evaluate({'extra': 'test'})
+        assert not native_torch.marker.evaluate({'extra': 'mock'})
+        from importlib.metadata import requires
+        core_torch = next(Requirement(value) for value in requires('particle-sliders-core')
+                          if Requirement(value).name == 'torch')
+        assert core_torch.specifier.contains('2.11.0')
+        assert core_torch.specifier.contains('2.14.1+cpu')
         assert metadata['Requires-Python'] == '>=3.11,<3.15' or metadata['Requires-Python'] == '<3.15,>=3.11'
         historical = json.loads((Path(__file__).resolve().parents[1] / 'cohorts/s082/backend.lock.json').read_text())
         assert historical['shared_commit'] == 'f6807a91546e43e198645a3f8925d2dc7c9e03b4'

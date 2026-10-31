@@ -95,7 +95,7 @@ def observe(adapter):
             restore()
 
 
-def preflight_native(request):
+def preflight_native(request, *, render_outputs=('pil', 'latent')):
     """Validate actual local native arguments before loading or sampling."""
     if request['operation'] != 'render':
         return
@@ -104,8 +104,9 @@ def preflight_native(request):
     native = request['native']
     if set(native) - {'prompt', 'images', 'mask', 'height', 'width', 'output_type'}:
         raise ValueError('unsupported Fibo native argument; sampler remains four-step guidance1')
-    if native.get('output_type', 'pil') not in ('pil', 'latent'):
-        raise ValueError('Fibo output_type must be latent or pil')
+    output_type = native.get('output_type', request.get('output_type', render_outputs[0]))
+    if output_type not in render_outputs:
+        raise ValueError('unsupported Fibo output_type for this runtime: ' + str(output_type))
     prompt = native.get('prompt')
     if not isinstance(prompt, str) or not prompt.strip():
         raise ValueError('nonempty native edit instruction required')
@@ -171,7 +172,7 @@ def validate(options, spec):
 
 
 def preflight(options, request, spec):
-    preflight_native(request)
+    preflight_native(request, render_outputs=capabilities(spec.configuration).render_outputs)
 
 
 def prepare(options, spec):

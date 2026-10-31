@@ -11,7 +11,7 @@ not a pristine dependency resolver or native runtime installation result.
 
 | Executed check | Result |
 | --- | --- |
-| Installed product lifecycle, inference, CLI and modern HNDL cases | 22 passed, zero skipped |
+| Installed lifecycle, inference, CLI, modern HNDL and review regressions | 34 passed, zero skipped |
 | Extracted sdist → wheel packaging, installed offline import and provenance | 3 passed, zero skipped |
 | Original S082 product wheel, separate core0.8.2/PG0.9.1 environment | 17 passed, zero skipped |
 | Actual one-update S082 training checkpoint restore into modern product | Refused; modern checkpoint hash unchanged |
@@ -38,3 +38,19 @@ No repository workflow/automatic CI existed at the inspected public base.
 The draft must remain blocked until its exact shared-core commit is publicly
 fetchable and coordinated review is complete. Original `validation.json` and
 native-guide receipts keep their earlier S082 scope and counts.
+
+## Review findings and response
+
+| Finding | Verified response and regression evidence |
+| --- | --- |
+| Stale current Shared URL pointed at PR142 | Package metadata now links the shared repository. Historical native-guide PR142 links retain their explicitly historical scope. Distribution metadata assertion passes. |
+| Native extra uses Torch2.11 while CPU evidence uses2.14 | These are separate environments, not equivalent qualification. Retained the inspected Torch2.11.0/torchvision0.26.0 native pair and documented both lanes. Metadata checks confirm the native-only marker and that core accepts both versions; no native resolver or pretrained test is claimed. |
+| Legacy network could use a modern reserved cohort name | Both synthetic helper and manual/JSON backend opening now reject cross-profile reserved names before allocation. Custom names and default profile/cohort selections remain unchanged. Four cross-profile/history cases and a custom-name case pass. |
+| Nested PIL output could pass latent-only fixture preflight | Training and native-only preflight now check the selected runtime's output set. A latent top-level request with nested PIL output is rejected before allocation. PIL reference inputs with latent outputs remain accepted in both lifecycle paths. |
+| Hash allowlist missed added core modules | Admission now compares the complete core Python/extension/data file map to the locked map, excluding generated `__pycache__`. Added `.py`, sourceless `.pyc`, and extension `.so` files plus missing/changed source are rejected before allocation. |
+
+The follow-up installed run passed34 cases in14.32s; the updated distribution
+run passed3 cases in2.54s. The original17-case S082 pass is historical evidence
+for its unchanged source/environment, not a new execution of that lane.
+Core deserialization and cross-repository pin/publication atomicity remain
+central-owner review items. No shared-core source or historical lock was edited.

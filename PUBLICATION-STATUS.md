@@ -11,7 +11,7 @@ it is not an import-only adoption. CPU tests use a tiny synthetic EDIT host and
 actual released ParticleGAN0.9.4. They do not qualify pretrained model weights,
 GPU gradients, native BF16 behavior, memory, decoder parity or edit quality.
 [The installed qualification receipt](QUALIFICATION-20261031.md) records
-22 product cases and 3 distribution cases, all passing without skips.
+34 product/review cases and 3 distribution cases, all passing without skips.
 Text-to-image is unavailable and remains refused before model construction.
 
 The core owner's exact candidate is

@@ -65,3 +65,17 @@ continuous spatial domain, full versus split resume, EMA, native-only reload
 and rejected profile restoration without mutation. Pretrained/GPU sampling,
 training quality and memory remain unqualified. Historical S082 checkpoints
 require their original separate source environment; see `requirements-s082.txt`.
+
+## Review follow-up
+
+Reserved cohort names are checked against the network profile in both
+`synthetic_config` and backend opening (including manual/JSON configurations).
+A `legacy` network cannot use `fibo-hypergan-hndl-*`; the modern profile cannot
+use `fibo-core012-legacy-*`. Historical S081/S082 names cannot be rebound to this
+core. Explicit custom experiment names remain unchanged, while packet identity
+continues to bind the actual network/source profile independently of that name.
+
+CPU fixtures accept PIL objects as reference **inputs** and return latent
+**outputs** only. Both the top-level output request and nested native
+`output_type` must respect the runtime's capabilities before pipeline allocation.
+PIL output remains available only in the separate, unqualified native runtime.

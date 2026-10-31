@@ -14,10 +14,15 @@ def validate_profile(profile):
     from pathlib import Path
     lock = json.loads(files('fibo_particle_slider').joinpath('backend.lock.json').read_text())
     source_root = Path(particle_sliders.__file__).resolve().parent.parent
-    if any(not (source_root / name).is_file() or
-           hashlib.sha256((source_root / name).read_bytes()).hexdigest() != digest
-           for name, digest in lock['shared_source_sha256'].items()):
-        raise ValueError('Fibo core source differs; use the exact pinned cohort')
+    actual = {}
+    for package in ('particle_sliders', 'concept_slider_core'):
+        for path in (source_root / package).rglob('*'):
+            if (path.is_file() and '__pycache__' not in path.parts and
+                    (path.suffix in ('.py', '.pyc', '.pyo', '.pyi', '.so', '.pyd', '.json', '.hndl')
+                     or path.name == 'LICENSE')):
+                actual[path.relative_to(source_root).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if actual != lock['shared_source_sha256']:
+        raise ValueError('Fibo core source closure differs; use the exact pinned cohort')
     from particle_sliders.pg094 import PG_VERSION, PG_SOURCE_PROFILE
     from particle_sliders.pg09 import _released_sources
     if version('particle-sliders-core') != '0.12.0' or PG_VERSION != '0.9.4':
@@ -28,3 +33,20 @@ def validate_profile(profile):
         if actual != PROFILE:
             raise ValueError('Fibo HNDL profile differs from this cohort')
         verified_builder()
+
+
+COHORTS = {
+    PROFILE: 'fibo-hypergan-hndl-v2-cpu',
+    'legacy': 'fibo-core012-legacy-network-cpu',
+}
+
+
+def validate_cohort(cohort, profile):
+    """Reserve source/profile cohort names; custom experiment names stay opaque."""
+    if not isinstance(cohort, str) or not cohort:
+        raise ValueError('Fibo requires a nonempty cohort name')
+    modern_name = cohort == COHORTS[PROFILE] or cohort.startswith(COHORTS[PROFILE] + '-')
+    if (cohort.startswith('fibo-hypergan-hndl-') and (profile != PROFILE or not modern_name) or
+            cohort.startswith('fibo-core012-legacy-') and profile != 'legacy' or
+            cohort.startswith(('fibo-core082-', 'fibo-core081-'))):
+        raise ValueError('Fibo cohort name differs from the selected network/source profile')

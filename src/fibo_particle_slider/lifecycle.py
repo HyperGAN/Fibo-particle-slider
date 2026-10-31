@@ -139,19 +139,26 @@ def preflight(options, request, staged):
     from .inference import preflight_native
     if staged.get('before_update') is not None and not callable(staged['before_update']):
         raise ValueError('Fibo update admission must be a callable')
-    preflight_native(request)
+    preflight_native(request, render_outputs=capabilities(options).render_outputs)
 
 
-BACKEND = Backend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
+class FiboBackend(Backend):
+    def describe(self, config):
+        from .runtime import validate_cohort
+        validate_cohort(config.cohort, config.options.get('network_profile', 'hypergan-hndl-v2'))
+        return super().describe(config)
+
+
+BACKEND = FiboBackend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
 
 
 def synthetic_config(cache_dir, *, steps=4, cohort=None, network_profile='hypergan-hndl-v2'):
     """Config for the installed CPU example; the factory hides all construction."""
     from particle_sliders.lifecycle import SessionConfig
-    from .runtime import validate_profile
+    from .runtime import COHORTS, validate_cohort, validate_profile
     validate_profile(network_profile)
-    cohort = cohort or ('fibo-hypergan-hndl-v2-cpu' if network_profile != 'legacy'
-                        else 'fibo-core012-legacy-network-cpu')
+    cohort = COHORTS[network_profile] if cohort is None else cohort
+    validate_cohort(cohort, network_profile)
     return SessionConfig('fibo', cohort, network_profile=network_profile, dummy=True, cache_dir=str(cache_dir),
         manifest={'qualification': 'CPU fixture only', 'fixture': 'bounded Fibo EDIT protocol'},
         response_scale=1., steps=steps, ema_decay=.9)

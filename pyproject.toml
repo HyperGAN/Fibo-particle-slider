@@ -16,6 +16,8 @@ dependencies = [
 [project.optional-dependencies]
 test = ["pytest>=8", "build>=1", "pillow>=13.0.0"]
 mock = ["pillow>=13.0.0"]
+# Inspected native demo runtime; separate from the Torch2.14.1+cpu fixture lane.
+# This extra has not been resolved or qualified with pretrained model weights.
 native = [
   "diffusers @ git+https://github.com/muhammadali-afridi/diffusers.git@60f95274bf07ed705d675eb09d99b6ae125b601e",
   "transformers>=4.57", "accelerate", "pillow>=13.0.0",
@@ -24,7 +26,7 @@ native = [
 
 [project.urls]
 Repository = "https://github.com/HyperGAN/Fibo-particle-slider"
-Shared = "https://github.com/HyperGAN/particle-sliders/pull/142"
+Shared = "https://github.com/HyperGAN/particle-sliders"
 Model = "https://huggingface.co/briaai/Fibo-2.0-edit-turbo"
 
 [tool.setuptools.packages.find]

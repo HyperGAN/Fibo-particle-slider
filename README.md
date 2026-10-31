@@ -20,8 +20,8 @@ The exact core candidate must be published by its owner before a fresh VCS
 installation can resolve. This draft is not ready to merge until that immutable
 commit is publicly fetchable. Do not substitute another core or weaken source
 checks. [Publication status](PUBLICATION-STATUS.md) records this prerequisite.
-The two `backend.lock.json` copies bind the actual installed core source/data
-files. Core verifies the released PG sources, HNDL closure, HyperGAN builder
+The two `backend.lock.json` copies bind the exact installed core source/data
+file set and hashes, including rejection of additional Python/extension modules. Core verifies the released PG sources, HNDL closure, HyperGAN builder
 closure and clean build provenance before the product allocates a pipeline.
 
 Install in a fresh Python 3.11–3.14 environment once the exact core commit is
@@ -36,7 +36,18 @@ python -m fibo_particle_slider.example new-fibo-cpu-run
 
 This exercises a tiny synthetic EDIT host with real HNDL graphs and the real
 released PG optimizer. The optional `[native]` extra is the separately inspected
-model runtime; it is not needed for CPU fixtures. Native dependency resolution,
+model runtime; it is not needed for CPU fixtures.
+
+| Runtime lane | Torch / torchvision | Evidence |
+| --- | --- | --- |
+| Installed CPU fixture | Torch2.14.1+cpu; no torchvision execution required | Tiny EDIT host, real HNDL/PG tests |
+| Optional `[native]` demo runtime | Torch2.11.0 / torchvision0.26.0 | Inspected upstream pair; not installed, resolved or pretrained-qualified here |
+
+Use separate environments for these lanes: adding `[native]` selects Torch2.11.0
+and does not reproduce the CPU fixture receipt. Both Torch versions satisfy
+core's `>=2.6,<3` declaration; this is not evidence that pretrained execution works
+on either. The inspected native pair is retained without an untested upgrade.
+ Native dependency resolution,
 pretrained gradients, decoder parity, GPU memory and image quality are unrun.
 No model weights are downloaded by the fixture or bundled in the package.
 
