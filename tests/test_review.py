@@ -110,3 +110,27 @@ def test_renderer_callbacks_enforce_fixture_outputs_without_session_wrapper(tmp_
                         native_request=dict(prompt='keep jacket', images=arguments['images'])) as inference:
         with pytest.raises(ValueError, match='output_type'):
             inference.binding.render(**arguments)
+
+
+def test_original_renderer_call_shape_derives_fixture_limits_and_default(tmp_path, monkeypatch):
+    from fibo_particle_slider.inference import renderer
+    with BACKEND.open(synthetic_config(tmp_path / 'cache')) as session:
+        adapter = session.game.backend
+        callback = renderer(adapter)
+        arguments = dict(prompt='keep jacket', strength=1., seed=7,
+                         images=[Image.new('RGB', (8, 8))])
+        assert callback(**arguments).images[0].shape == (1, 4, 2, 2)
+        def forbidden(*args, **kwargs):
+            raise AssertionError('legacy renderer call reached unsupported PIL sampling')
+        monkeypatch.setattr(adapter, 'render_edit', forbidden)
+        with pytest.raises(ValueError, match='output_type'):
+            callback(**arguments, output_type='pil')
+        with pytest.raises(ValueError, match='exceed the adapter capabilities'):
+            renderer(adapter, render_outputs=('pil', 'latent'))
+
+
+def test_original_renderer_call_cannot_infer_broad_outputs_without_identity():
+    from types import SimpleNamespace
+    from fibo_particle_slider.inference import renderer
+    with pytest.raises(ValueError, match='adapter model identity'):
+        renderer(SimpleNamespace())

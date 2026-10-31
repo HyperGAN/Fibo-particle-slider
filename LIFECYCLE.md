@@ -79,3 +79,10 @@ CPU fixtures accept PIL objects as reference **inputs** and return latent
 **outputs** only. Both the top-level output request and nested native
 `output_type` must respect the runtime's capabilities before pipeline allocation.
 PIL output remains available only in the separate, unqualified native runtime.
+
+The original `fibo_particle_slider.inference.renderer(adapter)` call shape is
+retained. It validates the adapter's model identity and derives the runtime's
+actual output set; an explicit `render_outputs` may narrow that set but cannot
+widen it. Missing identity is refused rather than assuming native outputs.
+Direct fixture calls without `output_type` explicitly forward `latent` to the
+sampler, preventing an implicit native PIL default from escaping preflight.

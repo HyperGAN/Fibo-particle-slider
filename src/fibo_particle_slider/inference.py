@@ -131,8 +131,19 @@ def preflight_native(request, *, render_outputs=('pil', 'latent')):
             raise ValueError('Fibo native dimensions must be positive integers')
 
 
-def renderer(adapter, *, render_outputs):
+def renderer(adapter, *, render_outputs=None):
+    """Keep the original call shape; derive output limits from the actual base identity."""
+    from particle_sliders.fibo_native import _identity
+    identity = getattr(adapter, 'model_identity', None)
+    if not isinstance(identity, dict):
+        raise ValueError('Fibo renderer requires the adapter model identity')
+    identity = _identity(identity)
+    actual_outputs = capabilities({'dummy': identity.get('qualification') == 'CPU fixture only'}).render_outputs
+    render_outputs = actual_outputs if render_outputs is None else tuple(render_outputs)
+    if not render_outputs or any(output not in actual_outputs for output in render_outputs):
+        raise ValueError('Fibo renderer outputs exceed the adapter capabilities')
     def render(*, prompt, strength, seed, images, **native):
+        native.setdefault('output_type', render_outputs[0])
         preflight_native(dict(operation='render', native=dict(native, prompt=prompt, images=images)),
                          render_outputs=render_outputs)
         # CLI preflight accepts paths; the sampler always receives image objects.

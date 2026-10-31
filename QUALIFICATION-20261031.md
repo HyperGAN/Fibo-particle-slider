@@ -91,3 +91,27 @@ The installed tests ran outside the source checkout with all product/core/HNDL/
 HyperGAN/Torch modules imported from the new environment's own site-packages.
 The preceding read-only-dependency Torch2.14.1+cpu lane passed the same35 cases
 in14.71s. These are CPU software checks, not native model qualification.
+
+## Bounded renderer compatibility audit
+
+A read-only search covered40 available inventory/source-cohort and recorded
+original checkouts, with17,055 tracked Python/Markdown/TOML files. Fibo import
+references, direct calls, qualified calls and simple import aliases were
+examined. The only identified call sites were two historical in-package
+`renderer(adapter)` calls and the two current explicit-capability calls. No
+cross-repository call was identified within this scope; untracked files,
+arbitrary dynamic aliases and unknown external consumers were not covered.
+The exact paths, heads and matching lines are retained in the separate audit
+receipt; absence within this bounded search is not a claim that no external
+users exist.
+
+The positional helper call is preserved by deriving outputs from the validated
+adapter model identity. Explicit capabilities cannot broaden that set; a CPU
+fixture defaults to a latent output forwarded explicitly to sampling, and PIL
+output is still refused. Regressions cover the original call shape, its default,
+PIL refusal, attempted capability widening and missing identity. Shared-core
+source, pins and historical/default cohort identities remain unchanged.
+
+After this compatibility patch, the clean Torch2.6.0+cpu environment passed
+**37 installed cases in14.52s** and **3 distribution cases in2.31s**, zero skipped.
+No dependency pins, shared-core source or default/historical cohort names changed.
