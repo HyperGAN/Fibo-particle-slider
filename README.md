@@ -1,86 +1,80 @@
-For the new common session/CLI interface, see [LIFECYCLE.md](LIFECYCLE.md).
-
 # Fibo-particle-slider
 
-Experimental standalone derivative for
-[`briaai/Fibo-2.0-edit-turbo`](https://huggingface.co/briaai/Fibo-2.0-edit-turbo).
-The public source repository is `HyperGAN/Fibo-particle-slider`; implementation
-is proposed through a draft PR. The tested shared pin is now publicly reachable through
-[merged common-core PR144](https://github.com/HyperGAN/particle-sliders/pull/144).
-Historical [PR142](https://github.com/HyperGAN/particle-sliders/pull/142) retains
-its audit target; this draft does not retarget it.
+Experimental routed particle slider for **Fibo 2.0 Edit Turbo**. This source
+candidate connects the installed shared particle-sliders game to the real
+HyperGAN develop/HNDL projection and spatial critic. It does not contain a
+product-local GAN loss, optimizer, trainer or replacement sampler.
 
-The implementation lives in the pinned shared package. This wrapper re-exports
-the same classes, with no copied trainer, losses, regularizers or optimizer.
-It retains native EDIT image conditioning and four-step guidance 1 sampling,
-the actual routed particle bank, public PG 0.9.1 BISPF/DualNorm/SBNP, and strict
-FP32 adapter export/reload. See [the native guide](NATIVE-GUIDE.md) and the
-source receipt in `backend.lock.json`.
+## Exact modern cohort
 
-The [official model card](https://huggingface.co/briaai/Fibo-2.0-edit-turbo)
-says Turbo is **not intended for fine-tuning** and recommends Dev. Turbo is
-retained as specifically requested, with experimental training status and no
-pretrained quality claim. No text-to-image substitute is supported.
+| Component | Required identity |
+| --- | --- |
+| particle-sliders-core | 0.12.0, commit `4abc0eb03a4e3a84fc3e6d02734c13dc7e8ea231` |
+| ParticleGAN | official 0.9.4, verified release source profile |
+| HyperGAN | develop commit `5f368a3770cf5bdae0448995c9f76e29af8049f7`, clean build provenance |
+| HNDL | 0.10.0, `hypergan-hndl-v2` |
+| Native model | `briaai/Fibo-2.0-edit-turbo`, revision `177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7` |
+| Native Diffusers | custom commit `60f95274bf07ed705d675eb09d99b6ae125b601e` |
 
-The model is gated under **CC BY-NC 4.0**; commercial use requires a separate
-Bria agreement. Its access form includes explicit Terms & Conditions and
-Privacy Policy consent. No agreements were accepted. This wrapper's MIT code
-license does not relicense the base model or derived weights.
+The exact core candidate must be published by its owner before a fresh VCS
+installation can resolve. This draft is not ready to merge until that immutable
+commit is publicly fetchable. Do not substitute another core or weaken source
+checks. [Publication status](PUBLICATION-STATUS.md) records this prerequisite.
+The two `backend.lock.json` copies bind the actual installed core source/data
+files. Core verifies the released PG sources, HNDL closure, HyperGAN builder
+closure and clean build provenance before the product allocates a pipeline.
 
-After model access and a resource slot are explicitly resolved, install the
-reviewed shared pin and native runtime in an isolated environment. The exact
-official demo runtime and source hashes are in the guide. The backend's
-`staged_pipeline` loads only a checksum-verified local snapshot with explicit
-native component classes and safetensors. It never downloads a model, accepts
-terms, calls a prompt service or creates credentials.
-
-```python
-from fibo_particle_slider import (
-    FiboParticleSlider, FiboEditResponseAdapter, FiboCachedRows,
-    build_fibo_game, staged_pipeline, write_cache,
-)
-```
-
-`configs/jacket-edit.json` is a local preparation template with placeholders.
-It does not launch training or imply GPU admission. No images, model weights
-or adapter weights are bundled. CPU fixtures and actual released-PG tests are
-maintained in the shared package; GPU memory, real native gradients,
-checkpoint/reload sampling and held-out edit/preservation quality remain
-unqualified. MOSS owns current GPU scheduling.
-
-## Install and CPU checks
-
-The proposed common lifecycle is pinned to commit
-`f6807a91546e43e198645a3f8925d2dc7c9e03b4` (core 0.8.2), preserved as public
-ancestry of merged common-core PR144. This product passed **48 installed CPU
-checks** and remains a draft for exact-head review. See
-[qualification status](PUBLICATION-STATUS.md). No package release is implied.
-Both lock copies consume the common owner's canonical 38-file source hash map.
-This PG 0.9.1 proposal preserves the native backend/provenance bytes and adds
-native-only inference plus preflight/admission/observation hooks. The prior
-core 0.7.0 proposal remains a separate source cohort; its test results do not
-qualify the new proposal until the next scheduled CPU slot.
-The original PR1 receipts in `validation.json` describe the earlier
-`f797be1ea891f6aeeeb56c02402667bcf2a640a4` cohort; they are retained unchanged.
-The default installation does not include a pretrained model or diffusers.
-Install in an isolated environment with your reviewed CPU PyTorch build:
+Install in a fresh Python 3.11–3.14 environment once the exact core commit is
+available:
 
 ```bash
-python -m pip install '.[test]'
-CUDA_VISIBLE_DEVICES='' HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 python -m pytest -q
+python -m pip install '.[test,mock]'
+CUDA_VISIBLE_DEVICES='' HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
+  OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 python -m pytest -q
+python -m fibo_particle_slider.example new-fibo-cpu-run
 ```
 
-These commands are for a separately admitted verification slot. No suites,
-dependency installation, model loading or builds were run during the fresh
-source audit; current verification status is in [LIFECYCLE.md](LIFECYCLE.md).
+This exercises a tiny synthetic EDIT host with real HNDL graphs and the real
+released PG optimizer. The optional `[native]` extra is the separately inspected
+model runtime; it is not needed for CPU fixtures. Native dependency resolution,
+pretrained gradients, decoder parity, GPU memory and image quality are unrun.
+No model weights are downloaded by the fixture or bundled in the package.
 
-The tests build from an extracted source distribution, verify wheel contents
-and source identity, and import the installed wrapper with native model
-packages blocked. Shared native contract tests and released-PG CPU updates
-are recorded in [VALIDATION.md](VALIDATION.md). This is not a clean dependency
-resolution or pretrained/GPU qualification claim.
+## EDIT and text-to-image are separate
 
-The optional `[native]` extra records the inspected official demo runtime.
-Installing it or acquiring model access does not grant GPU scheduling
-approval. Nothing in this package accepts terms, creates credentials,
-downloads weights, schedules a job, merges a PR or deploys a service.
+The registered `fibo` backend requires 1–4 ordered reference images and supports
+native masks with one same-sized source image. It retains the native four-step,
+guidance-1 EDIT sampler and six layer-bundled Qwen3-VL conditioning tensors.
+It does **not** implement text-to-image. The inspected product and shared Fibo
+sources provide no text-to-image loader, conditioning adapter or lifecycle.
+An import or a successful EDIT fixture cannot qualify a text-to-image model.
+That path needs its own exact model/pipeline source, native response contract,
+shared binding and tests; substituting empty references would break this model's
+contract. The current capability gate continues to reject it before loading.
+
+The [upstream Turbo model card](https://huggingface.co/briaai/Fibo-2.0-edit-turbo)
+states that Turbo is not intended for fine-tuning and recommends Dev. The target
+remains experimental. Its CC BY-NC 4.0 weights and access terms are separate from
+this wrapper's MIT code. No terms were accepted and no weights published.
+
+## Existing checkpoints
+
+The known-good S082 product remains installable from its original exact source
+in a **separate environment**:
+
+```bash
+python -m pip install -r requirements-s082.txt
+```
+
+This selects product `c45be09f847542ae17f03872dea84663f9f44bb5`, core0.8.2
+`f6807a91546e43e198645a3f8925d2dc7c9e03b4`, and PG0.9.1. Its original lock is
+preserved byte-for-byte at `cohorts/s082/backend.lock.json`. Preserve original
+source/model/data receipts with those runs. The modern product uses a new
+`fibo-hypergan-hndl-v2-cpu` fixture cohort. It refuses historical source/profile
+checkpoints rather than relabeling or automatically converting them. The optional
+`legacy` network choice in core0.12 is a fresh comparison cohort, not an S082
+checkpoint loader.
+
+See [LIFECYCLE.md](LIFECYCLE.md) for session, CLI and native-only inference,
+[NATIVE-GUIDE.md](NATIVE-GUIDE.md) for historical native EDIT protocol evidence,
+and [PUBLICATION-STATUS.md](PUBLICATION-STATUS.md) for current scope and blockers.

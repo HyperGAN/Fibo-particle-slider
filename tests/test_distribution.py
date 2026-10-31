@@ -43,7 +43,8 @@ def test_distribution_retains_sources_and_no_weights(distribution):
     with tarfile.open(archive) as handle:
         names = {str(Path(name).relative_to(Path(name).parts[0])) for name in handle.getnames()}
     assert {'README.md', 'NATIVE-GUIDE.md', 'backend.lock.json', 'validation.json', 'VALIDATION.md',
-            'configs/jacket-edit.json', 'tests/test_distribution.py'} <= names
+            'configs/jacket-edit.json', 'tests/test_distribution.py', 'PUBLICATION-STATUS.md',
+            'requirements-s082.txt', 'cohorts/s082/backend.lock.json', 'QUALIFICATION-20261031.md'} <= names
     wheel, = (distribution / 'dist').glob('*.whl')
     with zipfile.ZipFile(wheel) as handle:
         names = set(handle.namelist())
@@ -55,6 +56,12 @@ def test_distribution_retains_sources_and_no_weights(distribution):
         dependency = next(value for value in metadata.get_all('Requires-Dist') if value.startswith('particle-sliders-core'))
         lock = json.loads(handle.read('fibo_particle_slider/backend.lock.json'))
         assert lock['shared_commit'] in dependency and '#subdirectory=packages/particle-sliders-core' in dependency
+        assert 'fibo-hndl' in dependency and 'serialization' in dependency
+        assert lock['network_profile'] == 'hypergan-hndl-v2'
+        assert metadata['Requires-Python'] == '>=3.11,<3.15' or metadata['Requires-Python'] == '<3.15,>=3.11'
+        historical = json.loads((Path(__file__).resolve().parents[1] / 'cohorts/s082/backend.lock.json').read_text())
+        assert historical['shared_commit'] == 'f6807a91546e43e198645a3f8925d2dc7c9e03b4'
+        assert historical['particlegan'] == '0.9.1'
 
 
 def test_installed_wheel_identity_and_offline_import(distribution):

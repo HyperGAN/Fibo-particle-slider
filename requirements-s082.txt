@@ -1,0 +1,2 @@
+# Historical product and core source cohort; install in a separate environment.
+fibo-particle-slider[test] @ git+https://github.com/HyperGAN/Fibo-particle-slider.git@c45be09f847542ae17f03872dea84663f9f44bb5

@@ -1,3 +1,7 @@
+> Historical S082 native protocol and CPU evidence. For the current HNDLv2
+> network/PG0.9.4 cohort and its remaining prerequisites, see README.md and
+> PUBLICATION-STATUS.md. The counts and pins below retain their original scope.
+
 # Fibo-particle-slider — experimental native EDIT backend
 
 This integrates **`briaai/Fibo-2.0-edit-turbo`**, revision
