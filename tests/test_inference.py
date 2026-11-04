@@ -36,7 +36,7 @@ def test_native_only_raw_ema_render_after_training_cache_removed(tmp_path, monke
     monkeypatch.setattr(torch.optim.Optimizer, '__init__', forbidden)
     before = torch.get_rng_state().clone()
     for selection, packet in packets.items():
-        assert set(packet['specification']['configuration']) == {'dummy'}
+        assert set(packet['specification']['configuration']) == {'dummy', 'network_profile', 'core_commit'}
         with open_inference(packet, backend=INFERENCE, references=True, output_type='latent',
                             native_request=native) as inference:
             assert inference.selection == selection
@@ -53,7 +53,7 @@ def test_native_only_raw_ema_render_after_training_cache_removed(tmp_path, monke
     assert not torch.cuda.is_initialized()
 
 
-@pytest.mark.parametrize('damage', ['references', 'mask'])
+@pytest.mark.parametrize('damage', ['references', 'mask', 'output_type'])
 def test_native_request_preflight_precedes_model_allocation(tmp_path, monkeypatch, damage):
     from fibo_particle_slider.synthetic import Pipeline
     def forbidden(*args, **kwargs):
@@ -62,8 +62,10 @@ def test_native_request_preflight_precedes_model_allocation(tmp_path, monkeypatc
     native = dict(prompt='keep jacket', images=[Image.new('RGB', (8, 8))])
     if damage == 'references':
         native['images'] *= 5
-    else:
+    elif damage == 'mask':
         native['mask'] = Image.new('L', (4, 4))
+    else:
+        native['output_type'] = 'unsupported'
     with pytest.raises(ValueError):
         BACKEND.open(synthetic_config(tmp_path / 'cache'), operation='render',
                      references=True, output_type='latent', native_request=native)

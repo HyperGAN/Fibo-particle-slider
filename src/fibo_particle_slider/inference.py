@@ -11,6 +11,9 @@ def attach(options, *, pipeline=None):
     from particle_sliders.fibo_native import (
         staged_pipeline, target_modules, FiboParticleSlider, FiboEditResponseAdapter,
     )
+    from .runtime import validate_profile
+    profile = options.get('network_profile', 'hypergan-hndl-v2')
+    validate_profile(profile)
     if pipeline is None:
         if options.get('dummy'):
             from .synthetic import Pipeline
@@ -30,7 +33,8 @@ def attach(options, *, pipeline=None):
                 restore()
             closed = True
     try:
-        slider = FiboParticleSlider(pipeline.transformer, seed=options.get('seed', 7))
+        slider = FiboParticleSlider(pipeline.transformer, seed=options.get('seed', 7),
+                                    network_profile=profile)
         return FiboEditResponseAdapter(pipeline, slider, model_identity=options['manifest']), close
     except BaseException:
         close()
@@ -91,7 +95,7 @@ def observe(adapter):
             restore()
 
 
-def preflight_native(request):
+def preflight_native(request, *, render_outputs=('pil', 'latent')):
     """Validate actual local native arguments before loading or sampling."""
     if request['operation'] != 'render':
         return
@@ -100,6 +104,9 @@ def preflight_native(request):
     native = request['native']
     if set(native) - {'prompt', 'images', 'mask', 'height', 'width', 'output_type'}:
         raise ValueError('unsupported Fibo native argument; sampler remains four-step guidance1')
+    output_type = native.get('output_type', request.get('output_type', render_outputs[0]))
+    if output_type not in render_outputs:
+        raise ValueError('unsupported Fibo output_type for this runtime: ' + str(output_type))
     prompt = native.get('prompt')
     if not isinstance(prompt, str) or not prompt.strip():
         raise ValueError('nonempty native edit instruction required')
@@ -124,9 +131,21 @@ def preflight_native(request):
             raise ValueError('Fibo native dimensions must be positive integers')
 
 
-def renderer(adapter):
+def renderer(adapter, *, render_outputs=None):
+    """Keep the original call shape; derive output limits from the actual base identity."""
+    from particle_sliders.fibo_native import _identity
+    identity = getattr(adapter, 'model_identity', None)
+    if not isinstance(identity, dict):
+        raise ValueError('Fibo renderer requires the adapter model identity')
+    identity = _identity(identity)
+    actual_outputs = capabilities({'dummy': identity.get('qualification') == 'CPU fixture only'}).render_outputs
+    render_outputs = actual_outputs if render_outputs is None else tuple(render_outputs)
+    if not render_outputs or any(output not in actual_outputs for output in render_outputs):
+        raise ValueError('Fibo renderer outputs exceed the adapter capabilities')
     def render(*, prompt, strength, seed, images, **native):
-        preflight_native(dict(operation='render', native=dict(native, prompt=prompt, images=images)))
+        native.setdefault('output_type', render_outputs[0])
+        preflight_native(dict(operation='render', native=dict(native, prompt=prompt, images=images)),
+                         render_outputs=render_outputs)
         # CLI preflight accepts paths; the sampler always receives image objects.
         from PIL import Image
         def load(value):
@@ -141,8 +160,13 @@ def renderer(adapter):
 
 
 def validate(options, spec):
-    if set(spec.configuration) != {'dummy'} or type(spec.configuration['dummy']) is not bool:
+    from .runtime import CORE_COMMIT
+    if (set(spec.configuration) != {'dummy', 'network_profile', 'core_commit'} or
+            spec.configuration.get('core_commit') != CORE_COMMIT or
+            type(spec.configuration['dummy']) is not bool):
         raise ValueError('unsupported Fibo native-only configuration')
+    from .runtime import validate_profile
+    validate_profile(spec.configuration['network_profile'])
     allowed = {'model_dir', 'manifest', 'device', 'base_precision'}
     if set(options) - allowed:
         raise ValueError('native Fibo inference accepts no training/cache options')
@@ -162,16 +186,19 @@ def validate(options, spec):
 
 
 def preflight(options, request, spec):
-    preflight_native(request)
+    preflight_native(request, render_outputs=capabilities(spec.configuration).render_outputs)
 
 
 def prepare(options, spec):
     from particle_sliders.fibo_native import FORMAT
-    runtime = dict(options, dummy=spec.configuration['dummy'], manifest=options.get('manifest', spec.identity['model']))
+    runtime = dict(options, dummy=spec.configuration['dummy'],
+                   network_profile=spec.configuration['network_profile'],
+                   manifest=options.get('manifest', spec.identity['model']))
     adapter, close = attach(runtime)
     try:
         identity = native_identity(adapter, model_identity=adapter.model_identity, protocol=FORMAT)
-        return InferenceBinding(adapter.network, identity, close, render=renderer(adapter),
+        return InferenceBinding(adapter.network, identity, close, render=renderer(adapter,
+            render_outputs=capabilities(spec.configuration).render_outputs),
                                 observation=lambda: observe(adapter))
     except BaseException:
         close()

@@ -6,3 +6,11 @@ include validation.json
 recursive-include configs *.json
 recursive-include tests *.py
 include LIFECYCLE.md
+include PUBLICATION-STATUS.md
+include requirements-s082.txt
+recursive-include cohorts *.json
+include QUALIFICATION-20261031.md
+recursive-include cohorts *.txt *.md
+recursive-include tools *.py
+include MIGRATION-A794.md
+include MIGRATION-DDB.md

@@ -14,9 +14,12 @@ def _local_path(value, name, *, directory=False):
 
 def validate(options):
     allowed = {'model_dir', 'manifest', 'cache_dir', 'index_sha256', 'response_scale',
-               'steps', 'batch', 'seed', 'device', 'base_precision', 'ema_decay', 'pairs', 'dummy'}
+               'steps', 'batch', 'seed', 'device', 'base_precision', 'ema_decay', 'pairs', 'dummy',
+               'network_profile'}
     if set(options) - allowed:
         raise ValueError('unknown Fibo session option')
+    from .runtime import validate_profile
+    validate_profile(options.get('network_profile', 'hypergan-hndl-v2'))
     if type(options.get('dummy', False)) is not bool:
         raise ValueError('Fibo dummy must be a boolean')
     if (not isinstance(options.get('manifest'), dict) or
@@ -116,9 +119,12 @@ def prepare(options, *, pipeline=None, before_update=None):
             model_identity=manifest, device=options.get('device', 'cpu'))
         game = build_fibo_game(adapter, provider, response_scale=options['response_scale'],
             total_steps=options.get('steps', 4), batch_size=options.get('batch', 2), seed=options.get('seed', 7))
+        from .runtime import CORE_COMMIT
         specification = INFERENCE.specification(adapter, model_identity=adapter.model_identity,
-            protocol=FORMAT, configuration={'dummy': options.get('dummy', False)})
-        return Binding(game, close, renderer(adapter), inference=specification,
+            protocol=FORMAT, configuration={'dummy': options.get('dummy', False),
+                           'network_profile': adapter.slider.network_profile, 'core_commit': CORE_COMMIT})
+        return Binding(game, close, renderer(adapter, render_outputs=capabilities(options).render_outputs),
+                       inference=specification,
                        before_update=before_update, observation=lambda: observe(adapter))
     except BaseException:
         close()
@@ -135,15 +141,26 @@ def preflight(options, request, staged):
     from .inference import preflight_native
     if staged.get('before_update') is not None and not callable(staged['before_update']):
         raise ValueError('Fibo update admission must be a callable')
-    preflight_native(request)
+    preflight_native(request, render_outputs=capabilities(options).render_outputs)
 
 
-BACKEND = Backend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
+class FiboBackend(Backend):
+    def describe(self, config):
+        from .runtime import validate_cohort
+        validate_cohort(config.cohort, config.options.get('network_profile', 'hypergan-hndl-v2'))
+        return super().describe(config)
 
 
-def synthetic_config(cache_dir, *, steps=4, cohort='fibo-core082-synthetic-v1'):
+BACKEND = FiboBackend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
+
+
+def synthetic_config(cache_dir, *, steps=4, cohort=None, network_profile='hypergan-hndl-v2'):
     """Config for the installed CPU example; the factory hides all construction."""
     from particle_sliders.lifecycle import SessionConfig
-    return SessionConfig('fibo', cohort, dummy=True, cache_dir=str(cache_dir),
+    from .runtime import COHORTS, validate_cohort, validate_profile
+    validate_profile(network_profile)
+    cohort = COHORTS[network_profile] if cohort is None else cohort
+    validate_cohort(cohort, network_profile)
+    return SessionConfig('fibo', cohort, network_profile=network_profile, dummy=True, cache_dir=str(cache_dir),
         manifest={'qualification': 'CPU fixture only', 'fixture': 'bounded Fibo EDIT protocol'},
         response_scale=1., steps=steps, ema_decay=.9)

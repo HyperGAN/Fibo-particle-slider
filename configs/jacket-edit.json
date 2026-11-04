@@ -17,9 +17,10 @@
   "particles": 128,
   "particle_dim": 4,
   "recipe": "bispf_optimized",
-  "particlegan": "0.9.1",
+  "particlegan": "0.9.4",
   "response_scale": 1.0,
   "batch_size": 2,
   "qualification": "CPU contracts only; native execution and training budget require resource-owner admission",
-  "publication": "standalone source implementation proposed through draft PR; no model or adapter weights published"
+  "publication": "source draft; no package/model-weight release",
+  "network_profile": "hypergan-hndl-v2"
 }
