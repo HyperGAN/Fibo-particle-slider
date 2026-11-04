@@ -9,19 +9,20 @@ product-local GAN loss, optimizer, trainer or replacement sampler.
 
 | Component | Required identity |
 | --- | --- |
-| particle-sliders-core | 0.12.0, commit `a794e3b4a8813b012f2c4faa3da82b78d4a90214` |
+| particle-sliders-core | 0.12.0, commit `ddb41423bcefc1fe76cd94d0f9b367353b3ea137` |
 | ParticleGAN | official 0.9.4, verified release source profile |
 | HyperGAN | develop commit `5f368a3770cf5bdae0448995c9f76e29af8049f7`, clean build provenance |
 | HNDL | 0.10.0, `hypergan-hndl-v2` |
 | Native model | `briaai/Fibo-2.0-edit-turbo`, revision `177f2d4a06b6587144ef5c2b8452a4f1fe2ab4b7` |
 | Native Diffusers | custom commit `60f95274bf07ed705d675eb09d99b6ae125b601e` |
 
-The active modern candidate selects the cleared immutable source above. Its
-recursive 51-file source/data closure is checked against both built artifacts;
-[the migration guide](MIGRATION-A794.md) records reproducible checks and packet
-identity changes. Prior `4abc` preview packets remain bound to their original
+The active modern candidate selects the exact shared source above, including
+the merged unified training and isolated executor interface. Its
+recursive 574-file source/data closure is checked against both built artifacts;
+[the migration guide](MIGRATION-DDB.md) records reproducible checks and packet
+identity changes. Prior `a794` and `4abc` preview packets remain bound to their original
 product/core source environment. They are not relabeled or converted.
-Coordinated Claude RETURN review is required before landing this product pin.
+Existing coordinated Claude RETURN review remains required before landing this product pin.
 The two `backend.lock.json` copies bind the exact installed core source/data
 file set and hashes within `particle_sliders` and `concept_slider_core`,
 including rejection of additional Python/extension modules there. Generated
@@ -46,14 +47,17 @@ model runtime; it is not needed for CPU fixtures.
 
 | Runtime lane | Torch / torchvision | Evidence |
 | --- | --- | --- |
-| Clean supported CPU install | Official Torch 2.6.0+cpu; no torchvision execution required | Fresh dependency-resolving install and real HNDL/PG fixture tests |
+| Current ddb software check | Torch 2.14.1+cu130, CPU execution only | 46 distinct installed/packaging/executor cases; existing read-only dependencies |
+| Earlier clean supported CPU install | Official Torch 2.6.0+cpu; no torchvision execution required | Fresh dependency-resolving install and real HNDL/PG fixture tests |
 | Earlier CPU fixture | Torch 2.14.1+cpu; no torchvision execution required | Real HNDL/PG tests with read-only dependency reuse |
 | Optional `[native]` demo runtime | Torch 2.11.0 / torchvision 0.26.0 | Inspected upstream pair; not installed, resolved or pretrained-qualified here |
 
+The historical CPU rows retain their original source receipts; see
+[MIGRATION-DDB.md](MIGRATION-DDB.md) for this source pin's verification.
 Use separate environments for these lanes: adding `[native]` selects Torch 2.11.0
-and does not reproduce either CPU fixture receipt. All three Torch versions satisfy
+and does not reproduce either CPU fixture receipt. These Torch versions satisfy
 core's `>=2.6,<3` declaration; this is not evidence that pretrained execution works
-on either. The inspected native pair is retained without an untested upgrade.
+in these fixture lanes. The inspected native pair is retained without an untested upgrade.
 Native dependency resolution,
 pretrained gradients, decoder parity, GPU memory and image quality are unrun.
 No model weights are downloaded by the fixture or bundled in the package.

@@ -45,7 +45,9 @@ def test_distribution_retains_sources_and_no_weights(distribution):
     assert {'README.md', 'NATIVE-GUIDE.md', 'backend.lock.json', 'validation.json', 'VALIDATION.md',
             'configs/jacket-edit.json', 'tests/test_distribution.py', 'PUBLICATION-STATUS.md',
             'requirements-s082.txt', 'cohorts/s082/backend.lock.json', 'QUALIFICATION-20261031.md', 'MIGRATION-A794.md',
-            'tools/update_core_lock.py', 'cohorts/preview-core4abc/backend.lock.json',
+            'tools/update_core_lock.py', 'MIGRATION-DDB.md', 'configs/training-fixture-profile.json',
+            'cohorts/preview-corea794/backend.lock.json', 'cohorts/preview-corea794/requirements.txt',
+            'cohorts/preview-core4abc/backend.lock.json',
             'cohorts/preview-core4abc/requirements.txt'} <= names
     wheel, = (distribution / 'dist').glob('*.whl')
     with zipfile.ZipFile(wheel) as handle:

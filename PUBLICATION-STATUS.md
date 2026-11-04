@@ -10,17 +10,19 @@ and the HNDL spatial critic through the exact clean HyperGAN develop builder;
 it is not an import-only adoption. CPU tests use a tiny synthetic EDIT host and
 actual released ParticleGAN 0.9.4. They do not qualify pretrained model weights,
 GPU gradients, native BF16 behavior, memory, decoder parity or edit quality.
-[The installed qualification receipt](QUALIFICATION-20261031.md) records
+[The earlier a794 installed qualification receipt](QUALIFICATION-20261031.md) records
 42 product/review/migration cases and 3 distribution cases, all passing without skips.
 Text-to-image is unavailable and remains refused before model construction.
 
 The active cleared core is
-`a794e3b4a8813b012f2c4faa3da82b78d4a90214`. Core 0.12.0, official PG 0.9.4,
+`ddb41423bcefc1fe76cd94d0f9b367353b3ea137`. Core 0.12.0, official PG 0.9.4,
 HyperGAN develop `5f368a3770cf5bdae0448995c9f76e29af8049f7` and HNDL 0.10.0
 remain explicit. This migration changes the recursive source closure and
-native-only artifact identity. The earlier 4abc preview and original S082 source
+native-only artifact identity. The earlier a794/4abc previews and original S082 source
 locks remain separately preserved; no old packet metadata is rewritten.
-MIGRATION-A794.md describes reproducible checks and the exact source boundary.
+MIGRATION-DDB.md records 46 distinct installed/packaging/executor cases for
+this exact pin, with CPU execution and reused dependency installations. It also
+describes reproducible checks and the exact source boundary.
 The central core's CPU/synthetic-CUDA evidence does not qualify native Fibo,
 response widths, text-to-image, audio or model quality. This product still
 requires renewed actual-diff Claude RETURN review before landing.

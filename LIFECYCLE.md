@@ -87,7 +87,11 @@ widen it. Missing identity is refused rather than assuming native outputs.
 Direct fixture calls without `output_type` explicitly forward `latent` to the
 sampler, preventing an implicit native PIL default from escaping preflight.
 
-The active modern source is now core `a794e3b4a8813b012f2c4faa3da82b78d4a90214`.
-See MIGRATION-A794.md for lock regeneration and separate preview installation.
+The active modern source is now core `ddb41423bcefc1fe76cd94d0f9b367353b3ea137`.
+See MIGRATION-DDB.md for lock regeneration and separate preview installation.
 The existing cohort labels stay unchanged; packet source identities remain
 strict, so reusing a label does not migrate an old checkpoint or native artifact.
+
+The merged executor also accepts `--profile configs/training-fixture-profile.json`
+for `plan`, `train --check`, periodic checkpointing and resume. That profile
+requires explicit `dummy=true` and remains fixture-only; see MIGRATION-DDB.md.

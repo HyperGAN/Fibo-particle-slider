@@ -2,7 +2,7 @@
 from importlib.metadata import version
 
 PROFILE = 'hypergan-hndl-v2'
-CORE_COMMIT = 'a794e3b4a8813b012f2c4faa3da82b78d4a90214'
+CORE_COMMIT = 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137'
 CORE_VERSION = '0.12.0'
 
 

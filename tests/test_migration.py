@@ -1,4 +1,4 @@
-"""Product checks for the exact a794 modern source cohort; no native weights."""
+"""Product checks for the exact ddb modern source cohort; no native weights."""
 from copy import deepcopy
 
 from PIL import Image
@@ -30,7 +30,7 @@ def test_native_packet_binds_exact_core_and_rejects_old_preview_configuration(tm
 
 
 def test_ema_disabled_raw_resume_and_exact_off_render(tmp_path):
-    config = synthetic_config(tmp_path / 'cache', steps=2, cohort='fibo-a794-ema-disabled')
+    config = synthetic_config(tmp_path / 'cache', steps=2, cohort='fibo-ddb-ema-disabled')
     options = config.options
     options['ema_decay'] = None
     config = SessionConfig(config.backend, config.cohort, **options)

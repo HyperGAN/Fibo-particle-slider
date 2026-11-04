@@ -1,0 +1,2 @@
+# Original CPU-qualified PG094/a794 preview; install in a separate environment.
+fibo-particle-slider @ git+https://github.com/HyperGAN/Fibo-particle-slider.git@aab985662c5efe295dbd28523bf54b90b5e49e48
