@@ -15,9 +15,11 @@ def _local_path(value, name, *, directory=False):
 def validate(options):
     allowed = {'model_dir', 'manifest', 'cache_dir', 'index_sha256', 'response_scale',
                'steps', 'batch', 'seed', 'device', 'base_precision', 'ema_decay', 'pairs', 'dummy',
-               'network_profile'}
+               'network_profile', 'lr', 'd_lr_mult', 'prior_lr_mult'}
     if set(options) - allowed:
         raise ValueError('unknown Fibo session option')
+    from .learning_rates import recipe_overrides
+    recipe_overrides(**{key: options.get(key) for key in ('lr', 'd_lr_mult', 'prior_lr_mult')})
     from .runtime import validate_profile
     validate_profile(options.get('network_profile', 'hypergan-hndl-v2'))
     if type(options.get('dummy', False)) is not bool:
@@ -85,6 +87,8 @@ def prepare(options, *, pipeline=None, before_update=None):
         FORMAT, FiboCachedRows, write_cache, build_fibo_game,
     )
     from .inference import INFERENCE, attach, observe, renderer
+    from .learning_rates import recipe_overrides
+    rates = recipe_overrides(**{key: options.get(key) for key in ('lr', 'd_lr_mult', 'prior_lr_mult')})
     manifest = options['manifest']
     if before_update is not None and not callable(before_update):
         raise ValueError('Fibo update admission must be a callable')
@@ -118,7 +122,7 @@ def prepare(options, *, pipeline=None, before_update=None):
         provider = FiboCachedRows(options['cache_dir'], index_sha256=checksum,
             model_identity=manifest, device=options.get('device', 'cpu'))
         game = build_fibo_game(adapter, provider, response_scale=options['response_scale'],
-            total_steps=options.get('steps', 4), batch_size=options.get('batch', 2), seed=options.get('seed', 7))
+            total_steps=options.get('steps', 4), batch_size=options.get('batch', 2), seed=options.get('seed', 7), recipe_overrides=rates)
         from .runtime import CORE_COMMIT
         specification = INFERENCE.specification(adapter, model_identity=adapter.model_identity,
             protocol=FORMAT, configuration={'dummy': options.get('dummy', False),
@@ -154,13 +158,16 @@ class FiboBackend(Backend):
 BACKEND = FiboBackend('fibo', capabilities({}), prepare, validate, capabilities, preflight=preflight)
 
 
-def synthetic_config(cache_dir, *, steps=4, cohort=None, network_profile='hypergan-hndl-v2'):
+def synthetic_config(cache_dir, *, steps=4, cohort=None, network_profile='hypergan-hndl-v2',
+                     lr=None, d_lr_mult=None, prior_lr_mult=None):
     """Config for the installed CPU example; the factory hides all construction."""
     from particle_sliders.lifecycle import SessionConfig
     from .runtime import COHORTS, validate_cohort, validate_profile
+    from .learning_rates import recipe_overrides
+    rates = recipe_overrides(lr=lr, d_lr_mult=d_lr_mult, prior_lr_mult=prior_lr_mult)
     validate_profile(network_profile)
     cohort = COHORTS[network_profile] if cohort is None else cohort
     validate_cohort(cohort, network_profile)
     return SessionConfig('fibo', cohort, network_profile=network_profile, dummy=True, cache_dir=str(cache_dir),
         manifest={'qualification': 'CPU fixture only', 'fixture': 'bounded Fibo EDIT protocol'},
-        response_scale=1., steps=steps, ema_decay=.9)
+        response_scale=1., steps=steps, ema_decay=.9, **rates)

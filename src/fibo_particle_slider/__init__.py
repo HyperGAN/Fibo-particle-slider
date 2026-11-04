@@ -10,4 +10,4 @@ __all__ = [
     'FiboCachedRows', 'FiboEditResponseAdapter', 'FiboParticleSlider',
     'build_fibo_game', 'staged_pipeline', 'write_cache',
 ]
-__version__ = '0.2.0'
+__version__ = '0.2.1'

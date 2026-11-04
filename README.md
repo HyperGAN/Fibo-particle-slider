@@ -9,7 +9,7 @@ product-local GAN loss, optimizer, trainer or replacement sampler.
 
 | Component | Required identity |
 | --- | --- |
-| particle-sliders-core | 0.12.0, commit `ddb41423bcefc1fe76cd94d0f9b367353b3ea137` |
+| particle-sliders-core | 0.12.0, commit `df0ea1c33e9bca0180eb8137a2db4229bbb88cb8` |
 | ParticleGAN | official 0.9.4, verified release source profile |
 | HyperGAN | develop commit `5f368a3770cf5bdae0448995c9f76e29af8049f7`, clean build provenance |
 | HNDL | 0.10.0, `hypergan-hndl-v2` |
@@ -92,7 +92,7 @@ This selects product `c45be09f847542ae17f03872dea84663f9f44bb5`, core 0.8.2
 `f6807a91546e43e198645a3f8925d2dc7c9e03b4`, and PG 0.9.1. Its original lock is
 preserved byte-for-byte at `cohorts/s082/backend.lock.json`. Preserve original
 source/model/data receipts with those runs. The modern product uses a new
-`fibo-hypergan-hndl-v2-cpu` fixture cohort. It refuses historical source/profile
+`fibo-hypergan-hndl-v2-lr-cpu` fixture cohort. It refuses historical source/profile
 checkpoints rather than relabeling or automatically converting them. The optional
 `legacy` network choice in core 0.12 is a fresh comparison cohort, not an S082
 checkpoint loader.
@@ -106,3 +106,5 @@ The prior modern preview is preserved separately at product
 `cohorts/preview-core4abc/requirements.txt` in its original environment to
 continue those runs. Current native-only artifacts explicitly bind the cleared
 core commit and reject earlier preview specifications.
+
+Learning-rate controls and source-cohort migration: [LEARNING-RATES.md](LEARNING-RATES.md).

@@ -1,0 +1,9 @@
+# Learning rates
+
+Current Fibo training accepts optional `lr` (base/generator), `d_lr_mult` (critic multiplier) and `prior_lr_mult` (routed particle bank multiplier). Values must be finite positive numbers; booleans are rejected. The existing shared ParticleGAN recipe owns all optimizer construction: D = `lr * d_lr_mult`, particle bank = `lr * prior_lr_mult`. Omitted values retain `bispf_optimized` defaults G **0.012**, D multiplier **1.5**, particle multiplier **2.5**. These are defaults, not evidence of native LR calibration.
+
+Use these keys in common session `options`, or pass them to `synthetic_config(cache_dir, lr=..., d_lr_mult=..., prior_lr_mult=...)`. The CPU example accepts `python -m fibo_particle_slider.example OUTPUT --lr 0.00002 --d-lr-mult 1.5 --prior-lr-mult 2.5`; it exercises software behavior with a tiny fixture, not pretrained Fibo LR quality.
+
+This is a fresh LR source cohort: package 0.2.1, core `df0ea1c33e9bca0180eb8137a2db4229bbb88cb8`, default fixture cohort `fibo-hypergan-hndl-v2-lr-cpu`. The shared core adds only a `recipe_overrides` passthrough to its existing Fibo builder. The current lock verifies all 574 installed source/data files against exact source, wheel and sdist. Historical ddb packets retain their original source and recipe in `cohorts/pg094-ddb`; install that archive's immutable product requirement in a separate environment to read/resume them. Older S082 and modern preview archives remain unchanged. Existing source-cohort names are not relabelled.
+
+Every resolved recipe and session configuration binds full-state resume. A changed rate requires a fresh experiment output/cohort. Native calibration must hold data, seeds and fixed update budgets constant, evaluate held-out edit/preservation behavior, and record exact pretrained/runtime and source identities. Current software tests do not qualify native/GPU behavior or select a tuned LR.

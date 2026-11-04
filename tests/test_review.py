@@ -41,8 +41,8 @@ def test_source_closure_rejects_additions_and_mutations_before_allocation(tmp_pa
 
 
 @pytest.mark.parametrize('profile,cohort', [
-    ('legacy', 'fibo-hypergan-hndl-v2-cpu'),
-    ('hypergan-hndl-v2', 'fibo-core012-legacy-network-cpu'),
+    ('legacy', 'fibo-hypergan-hndl-v2-lr-cpu'),
+    ('hypergan-hndl-v2', 'fibo-core012-lr-legacy-network-cpu'),
     ('hypergan-hndl-v2', 'fibo-core082-synthetic-v1'),
     ('hypergan-hndl-v2', 'fibo-hypergan-hndl-v1-cpu'),
 ])
@@ -62,8 +62,8 @@ def test_reserved_cohort_names_cannot_rebind_network_profile(tmp_path, monkeypat
 
 def test_custom_cohorts_preserve_explicit_names_and_profile_identity(tmp_path):
     assert synthetic_config(tmp_path / 'a', cohort='owned-edit-run').cohort == 'owned-edit-run'
-    assert synthetic_config(tmp_path / 'b', network_profile='legacy').cohort == 'fibo-core012-legacy-network-cpu'
-    assert synthetic_config(tmp_path / 'c').cohort == 'fibo-hypergan-hndl-v2-cpu'
+    assert synthetic_config(tmp_path / 'b', network_profile='legacy').cohort == 'fibo-core012-lr-legacy-network-cpu'
+    assert synthetic_config(tmp_path / 'c').cohort == 'fibo-hypergan-hndl-v2-lr-cpu'
 
 
 def test_fixture_pil_output_rejected_before_training_and_inference_allocation(tmp_path, monkeypatch):
