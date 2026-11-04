@@ -1,5 +1,5 @@
 """Run with python -m fibo_particle_slider.example OUTPUT; CPU mock only."""
-import sys
+import argparse
 from pathlib import Path
 import torch
 from particle_sliders.lifecycle import open_session
@@ -10,8 +10,15 @@ from .lifecycle import synthetic_config
 
 def main():
     torch.set_num_threads(1)
-    output = Path(sys.argv[1])
-    config = synthetic_config(output / 'cache')
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('output', type=Path)
+    parser.add_argument('--lr', type=float, help='PG base/G rate; omitted uses preset')
+    parser.add_argument('--d-lr-mult', type=float, help='D rate = lr * multiplier')
+    parser.add_argument('--prior-lr-mult', type=float, help='particle-bank rate = lr * multiplier')
+    args = parser.parse_args()
+    output = args.output
+    config = synthetic_config(output / 'cache', lr=args.lr, d_lr_mult=args.d_lr_mult,
+                              prior_lr_mult=args.prior_lr_mult)
     with open_session(config) as session:
         session.train(stop_after=2)
         session.checkpoint(output / 'training.pt')

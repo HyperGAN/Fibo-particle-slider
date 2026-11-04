@@ -2,7 +2,7 @@
 from importlib.metadata import version
 
 PROFILE = 'hypergan-hndl-v2'
-CORE_COMMIT = 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137'
+CORE_COMMIT = 'df0ea1c33e9bca0180eb8137a2db4229bbb88cb8'
 CORE_VERSION = '0.12.0'
 
 
@@ -38,8 +38,8 @@ def validate_profile(profile):
 
 
 COHORTS = {
-    PROFILE: 'fibo-hypergan-hndl-v2-cpu',
-    'legacy': 'fibo-core012-legacy-network-cpu',
+    PROFILE: 'fibo-hypergan-hndl-v2-lr-cpu',
+    'legacy': 'fibo-core012-lr-legacy-network-cpu',
 }
 
 
@@ -47,8 +47,11 @@ def validate_cohort(cohort, profile):
     """Reserve source/profile cohort names; custom experiment names stay opaque."""
     if not isinstance(cohort, str) or not cohort:
         raise ValueError('Fibo requires a nonempty cohort name')
+    if any(cohort == old or cohort.startswith(old + '-') for old in
+           ('fibo-hypergan-hndl-v2-cpu', 'fibo-core012-legacy-network-cpu')):
+        raise ValueError('historical Fibo source cohort requires its archived checkout')
     modern_name = cohort == COHORTS[PROFILE] or cohort.startswith(COHORTS[PROFILE] + '-')
     if (cohort.startswith('fibo-hypergan-hndl-') and (profile != PROFILE or not modern_name) or
-            cohort.startswith('fibo-core012-legacy-') and profile != 'legacy' or
+            cohort.startswith('fibo-core012-lr-legacy-') and profile != 'legacy' or
             cohort.startswith(('fibo-core082-', 'fibo-core081-'))):
         raise ValueError('Fibo cohort name differs from the selected network/source profile')

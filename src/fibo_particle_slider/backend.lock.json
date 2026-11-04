@@ -7,7 +7,7 @@
   "diffusers_repository": "https://github.com/muhammadali-afridi/diffusers",
   "diffusers_commit": "60f95274bf07ed705d675eb09d99b6ae125b601e",
   "provenance_sha256": "710929d0b34a188a7327269cd765b69014cdd3f3987a37c5216679b1b67fc1e1",
-  "shared_commit": "ddb41423bcefc1fe76cd94d0f9b367353b3ea137",
+  "shared_commit": "df0ea1c33e9bca0180eb8137a2db4229bbb88cb8",
   "shared_version": "0.12.0",
   "particlegan": "0.9.4",
   "network_profile": "hypergan-hndl-v2",
@@ -34,7 +34,7 @@
     "particle_sliders/fibo_hndl.py": "ff170b5ca321b6eac1db10f6f82b79abc60fd983409f9c8ada7513101de9b6a4",
     "particle_sliders/fibo_hndl_010_sources.json": "69e65e3daf18ac5c99154fd735d0b6fc8e8c95433c5b0618a074cdd203ed6251",
     "particle_sliders/fibo_hndl_sources.json": "77c9af5ca1e7fe312d276b905ab3acdf187e247f1ab2b838c057247eb78a1fbe",
-    "particle_sliders/fibo_native.py": "cf81fd57a8098b4d9ad41c4ae703daa4125d241596b6df9e869ae59cc432fb3a",
+    "particle_sliders/fibo_native.py": "0df2f36088bb61042381d7af68ba870ce900bf32878cfa88b82488b2518f08c8",
     "particle_sliders/fibo_projection.hndl": "b5efac1cfb0c597e5d6e0839af6077ff36dec916901bfa254be78db9f691c086",
     "particle_sliders/fibo_provenance.json": "710929d0b34a188a7327269cd765b69014cdd3f3987a37c5216679b1b67fc1e1",
     "particle_sliders/field_critic.py": "4fbff8f1a01497f43c4b50b116a69bde5b01a6aeff6bb63d4e0c9418e69f39d1",
@@ -589,19 +589,19 @@
     "particle_sliders/textsliders/yue2_uni.py": "5ca28826b304fa88ec3750612e92453561350202656e892f783a884d2778bc0c",
     "particle_sliders/yue2_native.py": "b28b9db5358df02a1f9d65e07b4aa7537fab9e8d1ff416a03c8e353513b9c2b3"
   },
-  "shared_backend_sha256": "cf81fd57a8098b4d9ad41c4ae703daa4125d241596b6df9e869ae59cc432fb3a",
+  "shared_backend_sha256": "0df2f36088bb61042381d7af68ba870ce900bf32878cfa88b82488b2518f08c8",
   "qualification": "Installed CPU protocol fixtures; no pretrained/GPU or text-to-image qualification",
-  "shared_wheel_sha256": "f2dc11428e01021a3f68bc2aa98c0e1c390018714abe6fac6efe7f219e7df6d4",
+  "shared_wheel_sha256": "a0d7bff82a40699c8636250c7ef8c7dcb6b72b49dc2f08fbd5243ffdddf4fc35",
   "historical_s082": {
     "product_commit": "c45be09f847542ae17f03872dea84663f9f44bb5",
     "lock": "cohorts/s082/backend.lock.json"
   },
   "publication": "Cleared immutable modern core; product qualification remains CPU software only",
-  "shared_source_map_sha256": "9d63982147e8fe9189a1ca116ecf0ad58ba7cf8798575d8e832e4699651de22c",
-  "shared_sdist_sha256": "e6aba9bc23eea3c7547c5424b60e3d0b58bad57960bc1249ace87b3bed00be5c",
+  "shared_source_map_sha256": "e98290f4b689159030c307b73980ab59d8ba0802c0d2f13cb1e0f9321c06fda2",
+  "shared_sdist_sha256": "fbc2f748d3f01fe09f2a6d63d0cb66fc916198883f86cea4e72dcb426cff95b0",
   "previous_modern": {
-    "product_commit": "aab985662c5efe295dbd28523bf54b90b5e49e48",
-    "shared_commit": "a794e3b4a8813b012f2c4faa3da82b78d4a90214",
-    "lock": "cohorts/preview-corea794/backend.lock.json"
+    "product_commit": "c55f68fd005b2c6c965f50737a10e5c52b5d06c2",
+    "shared_commit": "ddb41423bcefc1fe76cd94d0f9b367353b3ea137",
+    "lock": "cohorts/pg094-ddb/backend.lock.json"
   }
 }

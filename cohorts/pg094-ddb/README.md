@@ -1,0 +1,1 @@
+Archived pre-LR core0.12/PG0.9.4 cohort. Install requirements.txt in a separate environment to retain the original source, defaults, and packet admission. The current LR cohort never relabels these packets.

@@ -18,7 +18,7 @@ def test_real_hndl_game_updates_only_adapter_bank_and_critic(tmp_path):
     with BACKEND.open(synthetic_config(tmp_path / 'cache'), pipeline=pipe) as session:
         slider = session.game.backend.slider
         assert slider.network_profile == PROFILE == 'hypergan-hndl-v2'
-        assert session.config.cohort == 'fibo-hypergan-hndl-v2-cpu'
+        assert session.config.cohort == 'fibo-hypergan-hndl-v2-lr-cpu'
         assert isinstance(session.game.critic, HNDLFieldCritic)
         assert all(isinstance(p, HNDLParticleProjection) for p in slider.adapters.values())
         assert session.game._signature['pg_version'] == '0.9.4'

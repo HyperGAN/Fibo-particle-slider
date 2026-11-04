@@ -1,0 +1,1 @@
+fibo-particle-slider @ git+https://github.com/HyperGAN/Fibo-particle-slider.git@c55f68fd005b2c6c965f50737a10e5c52b5d06c2

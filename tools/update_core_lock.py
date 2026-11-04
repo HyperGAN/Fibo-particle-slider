@@ -8,7 +8,7 @@ import tarfile
 import tomllib
 import zipfile
 
-TARGET = 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137'
+TARGET = 'df0ea1c33e9bca0180eb8137a2db4229bbb88cb8'
 NAMESPACES = ('particle_sliders/', 'concept_slider_core/')
 
 
@@ -54,9 +54,9 @@ def main():
                 shared_backend_sha256=sources['particle_sliders/fibo_native.py'],
                 shared_wheel_sha256=digest(args.wheel.read_bytes()),
                 shared_sdist_sha256=digest(args.sdist.read_bytes()),
-                previous_modern={'product_commit': 'aab985662c5efe295dbd28523bf54b90b5e49e48',
-                                 'shared_commit': 'a794e3b4a8813b012f2c4faa3da82b78d4a90214',
-                                 'lock': 'cohorts/preview-corea794/backend.lock.json'},
+                previous_modern={'product_commit': 'c55f68fd005b2c6c965f50737a10e5c52b5d06c2',
+                                 'shared_commit': 'ddb41423bcefc1fe76cd94d0f9b367353b3ea137',
+                                 'lock': 'cohorts/pg094-ddb/backend.lock.json'},
                 publication='Cleared immutable modern core; product qualification remains CPU software only')
     encoded = json.dumps(lock, indent=2) + '\n'
     for destination in (root / 'backend.lock.json', root / 'src/fibo_particle_slider/backend.lock.json'):

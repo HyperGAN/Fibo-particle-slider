@@ -14,3 +14,6 @@ recursive-include cohorts *.txt *.md
 recursive-include tools *.py
 include MIGRATION-A794.md
 include MIGRATION-DDB.md
+
+recursive-include cohorts/pg094-ddb *.json *.txt *.md
+include LEARNING-RATES.md
