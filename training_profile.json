@@ -1,0 +1,21 @@
+{
+  "schema": "particle-slider-profile-v1",
+  "name": "fibo-source",
+  "product": "Fibo-particle-slider",
+  "config_kind": "session",
+  "backend": "fibo",
+  "interface": "image",
+  "status": "source_only",
+  "runtime": {
+    "python": "python3"
+  },
+  "capabilities": {
+    "resume": true,
+    "periodic_checkpoint": true,
+    "check": true
+  },
+  "default_checkpoint_every": 32,
+  "evidence": "src/fibo_particle_slider/lifecycle.py",
+  "status_reason": "PG 0.9.1 with a real particle bank. Native execution still requires its verified local model manifest, source image pairs and cache.",
+  "source_revision": "c45be09f847542ae17f03872dea84663f9f44bb5"
+}
